@@ -10,8 +10,8 @@
       <stop offset="1" stop-color="#ff0" />
     </linearGradient>
   </defs>
-  <g fill-opacity=".5">
-    <rect width="738" height="534" x="-738" fill="#009d00" fill-rule="evenodd" rx="2.563" ry="2.554"
+  <g>
+    <rect width="738" height="534" x="-738" fill="green" fill-rule="evenodd" rx="2.563" ry="2.554"
       transform="rotate(-90)" />
     <g fill="none" stroke="#fff" stroke-opacity=".629" stroke-width="1.5">
       <path d="M118.192 416.992V90.426l434.511.683.684 325.883H118.192z"
