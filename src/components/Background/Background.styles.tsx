@@ -17,3 +17,10 @@ export const Content = styled.div`
   background: white;
   color: green;
 `;
+
+export const Image = styled.div`
+  > svg {
+    width: 100%;
+    height: 100%;
+  }
+`
