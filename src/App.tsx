@@ -1,13 +1,15 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 import {Background} from './components/Background';
+import {InputField} from './components/InputField';
 
 function App() {
   return (
     <div className="App">
-      <Background></Background>
+      {/* <Background /> */}
+
+      <InputField />
     </div>
   );
 }
