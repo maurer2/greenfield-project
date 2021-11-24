@@ -3,6 +3,7 @@ import './App.css';
 
 import {Background} from './components/Background';
 import {InputField} from './components/InputField';
+import {FormWrapper} from './components/FormWrapper';
 
 function App() {
   return (
@@ -10,6 +11,8 @@ function App() {
       {/* <Background /> */}
 
       <InputField />
+
+      <FormWrapper />
     </div>
   );
 }
