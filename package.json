@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@svgr/webpack": "^8.1.0",
+    "@tanstack/react-form": "^0.9.0",
+    "@tanstack/zod-form-adapter": "^0.9.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
@@ -20,7 +22,8 @@
     "next": "14.0.3",
     "react": "^18",
     "react-dom": "^18",
-    "typescript": "^5"
+    "typescript": "^5",
+    "zod": "^3.22.4"
   },
   "engines": {
     "npm": "Please use pnpm",

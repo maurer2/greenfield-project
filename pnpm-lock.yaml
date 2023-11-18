@@ -8,6 +8,12 @@ dependencies:
   '@svgr/webpack':
     specifier: ^8.1.0
     version: 8.1.0(typescript@5.2.2)
+  '@tanstack/react-form':
+    specifier: ^0.9.0
+    version: 0.9.0(react-dom@18.2.0)(react@18.2.0)
+  '@tanstack/zod-form-adapter':
+    specifier: ^0.9.0
+    version: 0.9.0(zod@3.22.4)
   '@types/node':
     specifier: ^20
     version: 20.9.1
@@ -41,6 +47,9 @@ dependencies:
   typescript:
     specifier: ^5
     version: 5.2.2
+  zod:
+    specifier: ^3.22.4
+    version: 3.22.4
 
 packages:
 
@@ -2110,6 +2119,56 @@ packages:
     resolution: {integrity: sha512-E4KcWTpoLHqwPHLxidpOqQbcrZVgi0rsmmZXUle1jXmJfuIf/UWpczUJ7MZZ5tlxytgJXyp0w4PGkkeLiuIdZw==}
     dependencies:
       tslib: 2.6.2
+    dev: false
+
+  /@tanstack/form-core@0.9.0:
+    resolution: {integrity: sha512-H0qknHox9Yf++IjQ4W0Bq7Yo/UKDykdV+5nhT4KqFRHzWRY1EGqDdAHu+1F+JdsC/S9/eDFqrgNsn4Ys/kBlbw==}
+    dependencies:
+      '@tanstack/store': 0.1.3
+    dev: false
+
+  /@tanstack/react-form@0.9.0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-Jop4dq2QB8lhb5SXSrmUvlo85O7OkzfnM7vaeAJHKrLp9ksgeVLoBu5SBD+b63lZI3FH/VE84k2lawKzP62E5g==}
+    peerDependencies:
+      react: ^17.0.0 || ^18.0.0
+      react-dom: ^17.0.0 || ^18.0.0
+      react-native: '*'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      react-native:
+        optional: true
+    dependencies:
+      '@tanstack/form-core': 0.9.0
+      '@tanstack/react-store': 0.1.3(react-dom@18.2.0)(react@18.2.0)
+      '@tanstack/store': 0.1.3
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
+  /@tanstack/react-store@0.1.3(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-nDOgSlarFFbIvVirAi/GcCyqyRMthgpuBhOhN87DkeQEau+ZNGsLKJifzrQYuWB0+4FXmgeoGaY/Dr383MPqZw==}
+    peerDependencies:
+      react: '>=16'
+      react-dom: '>=16'
+    dependencies:
+      '@tanstack/store': 0.1.3
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      use-sync-external-store: 1.2.0(react@18.2.0)
+    dev: false
+
+  /@tanstack/store@0.1.3:
+    resolution: {integrity: sha512-GnolmC8Fr4mvsHE1fGQmR3Nm0eBO3KnZjDU0a+P3TeQNM/dDscFGxtA7p31NplQNW3KwBw4t1RVFmz0VeKLxcw==}
+    dev: false
+
+  /@tanstack/zod-form-adapter@0.9.0(zod@3.22.4):
+    resolution: {integrity: sha512-76yQZ20xAR7K46453jErbkhe5WqWKrfNKGC1yC2cQ2Q0hklfFagFFqSxDwMkftXk9gBWJe8KSQj328uZxJftfA==}
+    peerDependencies:
+      zod: ^3.x
+    dependencies:
+      '@tanstack/form-core': 0.9.0
+      zod: 3.22.4
     dev: false
 
   /@trysound/sax@0.2.0:
@@ -5039,6 +5098,14 @@ packages:
       punycode: 2.1.1
     dev: false
 
+  /use-sync-external-store@1.2.0(react@18.2.0):
+    resolution: {integrity: sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
+    dev: false
+
   /vite-node@0.28.5(@types/node@20.9.1):
     resolution: {integrity: sha512-LmXb9saMGlrMZbXTvOveJKwMTBTNUH66c8rJnQ0ZPNX+myPEol64+szRzXtV5ORb0Hb/91yq+/D3oERoyAt6LA==}
     engines: {node: '>=v14.16.0'}
@@ -5223,4 +5290,8 @@ packages:
   /yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
+    dev: false
+
+  /zod@3.22.4:
+    resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
     dev: false

@@ -1,26 +1,25 @@
-import { useState, FormEvent, ReactElement } from "react";
+import { FormEvent, ReactElement } from "react";
 
 import * as styles from "./inputField.css";
 
-export type BackgroundProps = Record<string, void>;
+export type InputFieldProps = {
+  value: string,
+  onBlur: (event: FormEvent<HTMLInputElement>) => void,
+  onChange: (event: FormEvent<HTMLInputElement>) => void
+};
 
-const InputField = (): ReactElement => {
-  const [value, setValue] = useState('Value');
-
-  function handleOnChange(event: FormEvent<HTMLInputElement>): void {
-    setValue(event.currentTarget.value);
-  }
-
+const InputField = ({value, onBlur, onChange}: InputFieldProps): ReactElement => {
   return (
     <>
       <label htmlFor="value">Label</label>
       <input
-        value="value"
+        value={value ?? ''}
         id="value"
         name="value"
         type="text"
         placeholder="placeholder"
-        onChange={handleOnChange}
+        onChange={onChange}
+        onBlur={onBlur}
         className={styles.input}
       />
     </>
