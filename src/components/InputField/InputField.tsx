@@ -1,31 +1,30 @@
-import { VFC, useState, FormEvent } from "react";
-import { nanoid } from "nanoid";
+import { useState, FormEvent, ReactElement } from "react";
 
-import * as Styles from "./InputField.styles";
-import * as Types from "./InputField.types";
+import * as styles from "./inputField.css";
 
-const InputField: VFC<Types.InputFieldProps> = () => {
-  const [fieldId] = useState(() => nanoid(5));
-  const [value, setValue] = useState("");
+export type BackgroundProps = Record<string, void>;
+
+const InputField = (): ReactElement => {
+  const [value, setValue] = useState('Value');
 
   function handleOnChange(event: FormEvent<HTMLInputElement>): void {
     setValue(event.currentTarget.value);
   }
 
   return (
-    <Styles.Container>
-      <>
-        <Styles.Label htmlFor={fieldId}>Label</Styles.Label>
-        <input
-          value={value}
-          id={fieldId}
-          type="text"
-          placeholder="placeholder"
-          onChange={handleOnChange}
-        />
-      </>
-    </Styles.Container>
+    <>
+      <label htmlFor="value">Label</label>
+      <input
+        value="value"
+        id="value"
+        name="value"
+        type="text"
+        placeholder="placeholder"
+        onChange={handleOnChange}
+        className={styles.input}
+      />
+    </>
   );
 };
 
-export { InputField };
+export default InputField;

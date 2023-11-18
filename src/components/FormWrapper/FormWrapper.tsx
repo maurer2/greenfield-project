@@ -1,29 +1,31 @@
-import { VFC, useState, FormEvent } from "react";
+"use client";
 
-import { InputField } from "../InputField";
+import { useState, FormEvent, ReactElement } from "react";
 
-import * as Styles from "./FormWrapper.styles";
-import * as Types from "./FormWrapper.types";
+import InputField from "../InputField/InputField";
 
-const units = ['m', 'ft'] as const
-type Unit = typeof units[number]
+import * as styles from "./FormWrapper.css";
 
-const FormWrapper: VFC<Types.FormWrapperProps> = () => {
-  const [amount, setAmount] = useState("");
-  const [unit, setUnit] = useState<Unit>('m');
+const units = ["sqm", "sqft"] as const;
+type Unit = (typeof units)[number];
+
+const FormWrapper = (): ReactElement => {
+  const [amount, setAmount] = useState(0);
+  const [unit, setUnit] = useState<Unit>("sqm");
 
   function handleSubmit(event: FormEvent<HTMLFormElement>): void {
-    event.preventDefault()
-    console.log(event)
+    event.preventDefault();
+    console.log(event);
   }
 
   return (
-    <Styles.Container action="" method="" onSubmit={handleSubmit}>
-      <InputField />
-      <button type="submit">Submit</button>
-      <code></code>
-    </Styles.Container>
+    <form action="" onSubmit={handleSubmit} className={styles.form}>
+      <fieldset className={styles.fieldset}>
+        <InputField />
+        <button type="submit">Submit</button>
+      </fieldset>
+    </form>
   );
 };
 
-export { FormWrapper };
+export default FormWrapper;
