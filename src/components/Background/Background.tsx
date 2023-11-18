@@ -1,19 +1,14 @@
-import { FC, PropsWithChildren } from 'react';
+import { ReactElement } from 'react';
 
-import * as Styles from './Background.styles';
-import * as Types from './Background.types';
+import * as styles from './background.css'
+import Lines from './lines.svg'
 
-const Background: FC<PropsWithChildren<Types.BackgroundProps>> = () => (
-  <Styles.Container>
-    <>
-      <Styles.Content>
-        Background
-      </Styles.Content>
-      <Styles.Image />
-    </>
-  </Styles.Container>
+export type BackgroundProps = Record<string, void>;
+
+const Background = (): ReactElement => (
+  <div className={styles.container}>
+    <Lines className={styles.image} />
+  </div>
 )
 
-export {
-  Background
-}
+export default Background

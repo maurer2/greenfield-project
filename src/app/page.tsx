@@ -1,11 +1,12 @@
 import Image from 'next/image'
 
-import * as Styles from './page.css'
+import * as styles from './page.css'
+import Background from '@/components/Background/Background'
 
 export default function Home() {
   return (
-    <main className={Styles.Page}>
-      Home
+    <main className={styles.page}>
+      <Background />
     </main>
   )
 }

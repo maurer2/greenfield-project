@@ -2,7 +2,7 @@
   --max-width: 1100px;
 
   --foreground-rgb: #fff;
-  --background-rgb: #000;
+  --background-rgb: green;
 }
 
 * {
@@ -21,9 +21,11 @@ html {
 }
 
 body {
-  display: grid;
-  place-content: center;
-  min-height: 100svh;
+  height: 100svh;
+  width: 100svw;
   background: var(--background-rgb);
   color: var(--foreground-rgb);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
 }

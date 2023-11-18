@@ -1,6 +1,6 @@
 import { style } from '@vanilla-extract/css';
 
-export const Page = style({
+export const page = style({
   background: 'var(--foreground-rgb)',
   color: 'var(--background-rgb)',
 });
