@@ -1,9 +1,10 @@
 import Image from 'next/image'
-import styles from './page.module.css'
+
+import * as Styles from './page.css'
 
 export default function Home() {
   return (
-    <main className={styles.main}>
+    <main className={Styles.Page}>
       Home
     </main>
   )
