@@ -10,8 +10,8 @@ export const form = style({
 export const wrapper = style({
   display: 'grid',
   padding: '2rem',
-  gridTemplateColumns: '5rem 5rem max-content',
-  gridTemplateRows: 'max-content 1fr',
+  gridTemplateColumns: '7.5rem 7.5rem max-content',
+  gridTemplateRows: 'max-content 1fr auto',
   gap: '0.5rem 2rem',
   border: '4px solid var(--foreground-rgb)',
   background: ['var(--background-rgb)', 'rgb(from var(--background-rgb) r g b / 0.95)'], // fallback to solid colour, if browser does not support relative colours
@@ -19,7 +19,7 @@ export const wrapper = style({
 });
 
 export const submitButton = style({
-  gridRow: '1/-1',
+  gridRow: '1/span 2',
   padding: '0.5rem',
   fontSize: '1rem',
   background: 'var(--foreground-rgb)',

@@ -1,4 +1,5 @@
 import { FormEvent, ReactElement } from "react";
+import { ValidationError } from "@tanstack/react-form";
 
 import * as styles from "./inputField.css";
 
@@ -7,11 +8,13 @@ export type InputFieldProps = {
   value: string;
   onBlur: (event: FormEvent<HTMLInputElement>) => void;
   onChange: (event: FormEvent<HTMLInputElement>) => void;
+  errors: ValidationError[];
 };
 
 const InputField = ({
   label,
   value,
+  errors,
   onBlur,
   onChange,
 }: InputFieldProps): ReactElement => {
@@ -30,6 +33,7 @@ const InputField = ({
         onBlur={onBlur}
         className={styles.input}
       />
+      {Boolean(errors.length) && <p className={styles.errors}>{errors}</p>}
     </div>
   );
 };

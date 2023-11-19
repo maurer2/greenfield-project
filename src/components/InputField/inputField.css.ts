@@ -16,3 +16,8 @@ export const input = style({
   fontSize: '1rem',
   border: 0,
 });
+
+export const errors = style({
+  gridRowStart: 3,
+  gridRowEnd: 3,
+})

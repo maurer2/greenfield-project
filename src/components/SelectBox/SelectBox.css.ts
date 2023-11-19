@@ -9,9 +9,14 @@ export const label = style({
   gridRowEnd: 1,
 });
 
-export const input = style({
+export const select = style({
   gridRowStart: 2,
   gridRowEnd: 2,
   padding: '0.5rem',
   fontSize: '1rem',
 });
+
+export const errors = style({
+  gridRowStart: 3,
+  gridRowEnd: 3,
+})
