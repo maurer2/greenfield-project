@@ -12,6 +12,7 @@
     "@svgr/webpack": "^8.1.0",
     "@tanstack/react-form": "^0.9.0",
     "@tanstack/zod-form-adapter": "^0.9.0",
+    "@total-typescript/ts-reset": "^0.5.1",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

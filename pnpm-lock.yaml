@@ -14,6 +14,9 @@ dependencies:
   '@tanstack/zod-form-adapter':
     specifier: ^0.9.0
     version: 0.9.0(zod@3.22.4)
+  '@total-typescript/ts-reset':
+    specifier: ^0.5.1
+    version: 0.5.1
   '@types/node':
     specifier: ^20
     version: 20.9.1
@@ -2169,6 +2172,10 @@ packages:
     dependencies:
       '@tanstack/form-core': 0.9.0
       zod: 3.22.4
+    dev: false
+
+  /@total-typescript/ts-reset@0.5.1:
+    resolution: {integrity: sha512-AqlrT8YA1o7Ff5wPfMOL0pvL+1X+sw60NN6CcOCqs658emD6RfiXhF7Gu9QcfKBH7ELY2nInLhKSCWVoNL70MQ==}
     dev: false
 
   /@trysound/sax@0.2.0:

@@ -3,26 +3,34 @@ import { FormEvent, ReactElement } from "react";
 import * as styles from "./inputField.css";
 
 export type InputFieldProps = {
-  value: string,
-  onBlur: (event: FormEvent<HTMLInputElement>) => void,
-  onChange: (event: FormEvent<HTMLInputElement>) => void
+  label: string;
+  value: string;
+  onBlur: (event: FormEvent<HTMLInputElement>) => void;
+  onChange: (event: FormEvent<HTMLInputElement>) => void;
 };
 
-const InputField = ({value, onBlur, onChange}: InputFieldProps): ReactElement => {
+const InputField = ({
+  label,
+  value,
+  onBlur,
+  onChange,
+}: InputFieldProps): ReactElement => {
   return (
-    <>
-      <label htmlFor="value">Label</label>
+    <div className={styles.fieldWrapper}>
+      <label htmlFor="input" className={styles.label}>
+        {label}
+      </label>
       <input
-        value={value ?? ''}
-        id="value"
-        name="value"
+        value={value}
+        id="input"
+        name="input"
         type="text"
-        placeholder="placeholder"
+        placeholder="Input value"
         onChange={onChange}
         onBlur={onBlur}
         className={styles.input}
       />
-    </>
+    </div>
   );
 };
 

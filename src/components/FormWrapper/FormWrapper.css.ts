@@ -7,11 +7,23 @@ export const form = style({
   placeContent: 'center'
 });
 
-export const fieldset = style({
+export const wrapper = style({
   display: 'grid',
   padding: '2rem',
-  gridTemplateColumns: 'max-content 1fr 1fr',
-  gap: '1rem',
+  gridTemplateColumns: '5rem 5rem max-content',
+  gridTemplateRows: 'max-content 1fr',
+  gap: '0.5rem 2rem',
+  border: '4px solid var(--foreground-rgb)',
+  background: ['var(--background-rgb)', 'rgb(from var(--background-rgb) r g b / 0.95)'], // fallback to solid colour, if browser does not support relative colours
+  fontSize: '1rem'
+});
+
+export const submitButton = style({
+  gridRow: '1/-1',
+  padding: '0.5rem',
+  fontSize: '1rem',
+  background: 'var(--foreground-rgb)',
+  cursor: 'pointer',
+  appearance: 'button',
   border: 0,
-  background: 'var(--foreground-rgb)'
 });

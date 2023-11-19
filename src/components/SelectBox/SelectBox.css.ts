@@ -1,7 +1,7 @@
 import { style } from '@vanilla-extract/css';
 
 export const fieldWrapper = style({
-  display: 'contents'
+  display: 'contents',
 });
 
 export const label = style({
@@ -14,5 +14,4 @@ export const input = style({
   gridRowEnd: 2,
   padding: '0.5rem',
   fontSize: '1rem',
-  border: 0,
 });
