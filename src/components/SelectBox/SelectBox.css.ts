@@ -5,18 +5,18 @@ export const fieldWrapper = style({
 });
 
 export const label = style({
-  gridRowStart: 1,
   gridRowEnd: 1,
+  gridRowStart: 1,
 });
 
 export const select = style({
-  gridRowStart: 2,
-  gridRowEnd: 2,
-  padding: '0.5rem',
   fontSize: '1rem',
+  gridRowEnd: 2,
+  gridRowStart: 2,
+  padding: '0.5rem',
 });
 
 export const errors = style({
-  gridRowStart: 3,
   gridRowEnd: 3,
-})
+  gridRowStart: 3,
+});

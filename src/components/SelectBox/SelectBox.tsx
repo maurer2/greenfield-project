@@ -1,42 +1,42 @@
-import { FormEvent, ReactElement } from "react";
-import { ValidationError } from "@tanstack/react-form";
+import type { ValidationError } from '@tanstack/react-form';
+import type { FormEvent, ReactElement } from 'react';
 
-import * as styles from "./SelectBox.css";
+import type { Unit } from '../FormWrapper/FormWrapper';
 
-import type { Unit } from "../FormWrapper/FormWrapper";
+import * as styles from './SelectBox.css';
 
 export type SelectBoxProps = {
-  label: string;
-  value: Unit;
-  options: Unit[];
   errors: ValidationError[];
+  label: string;
   onBlur: (event: FormEvent<HTMLSelectElement>) => void;
   onChange: (event: FormEvent<HTMLSelectElement>) => void;
+  options: Unit[];
+  value: Unit;
 };
 
-const SelectBox = ({
-  label,
-  value,
-  options,
+function SelectBox({
   errors,
+  label,
   onBlur,
   onChange,
-}: SelectBoxProps): ReactElement => {
+  options,
+  value,
+}: SelectBoxProps): ReactElement {
   return (
     <div className={styles.fieldWrapper}>
-      <label htmlFor="select" className={styles.label}>
+      <label className={styles.label} htmlFor="select">
         {label}
       </label>
       <select
-        name="select"
-        id="select"
-        value={value}
-        onChange={onChange}
-        onBlur={onBlur}
         className={styles.select}
+        id="select"
+        name="select"
+        onBlur={onBlur}
+        onChange={onChange}
+        value={value}
       >
         {options.map((option) => (
-          <option value={option} key={option}>
+          <option key={option} value={option}>
             {option}
           </option>
         ))}
@@ -44,6 +44,6 @@ const SelectBox = ({
       {Boolean(errors.length) && <p className={styles.errors}>{errors}</p>}
     </div>
   );
-};
+}
 
 export default SelectBox;

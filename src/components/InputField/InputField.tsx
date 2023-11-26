@@ -1,41 +1,35 @@
-import { FormEvent, ReactElement } from "react";
-import { ValidationError } from "@tanstack/react-form";
+import type { ValidationError } from '@tanstack/react-form';
+import type { FormEvent, ReactElement } from 'react';
 
-import * as styles from "./inputField.css";
+import * as styles from './inputField.css';
 
 export type InputFieldProps = {
+  errors: ValidationError[];
   label: string;
-  value: string;
   onBlur: (event: FormEvent<HTMLInputElement>) => void;
   onChange: (event: FormEvent<HTMLInputElement>) => void;
-  errors: ValidationError[];
+  value: string;
 };
 
-const InputField = ({
-  label,
-  value,
-  errors,
-  onBlur,
-  onChange,
-}: InputFieldProps): ReactElement => {
+function InputField({ errors, label, onBlur, onChange, value }: InputFieldProps): ReactElement {
   return (
     <div className={styles.fieldWrapper}>
-      <label htmlFor="input" className={styles.label}>
+      <label className={styles.label} htmlFor="input">
         {label}
       </label>
       <input
-        value={value}
+        className={styles.input}
         id="input"
         name="input"
-        type="text"
-        placeholder="Input value"
-        onChange={onChange}
         onBlur={onBlur}
-        className={styles.input}
+        onChange={onChange}
+        placeholder="Input value"
+        type="text"
+        value={value}
       />
       {Boolean(errors.length) && <p className={styles.errors}>{errors}</p>}
     </div>
   );
-};
+}
 
 export default InputField;

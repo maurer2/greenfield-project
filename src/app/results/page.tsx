@@ -1,71 +1,63 @@
-"use server";
+'use server';
 
-import {
-  createColumnHelper,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
+import Background from '@/components/Background/Background';
+import { createColumnHelper, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
-import Background from "@/components/Background/Background";
-import * as styles from "./page.css";
+import * as styles from './page.css';
 
 type FootballArena = {
-  name: string;
   city: string;
+  name: string;
   size: [width: number, height: number];
 };
 
 type TableColumns = {
-  name: FootballArena["name"];
-  city: FootballArena["city"];
-  width: FootballArena["size"][0];
-  height: FootballArena["size"][1];
+  city: FootballArena['city'];
+  height: FootballArena['size'][1];
+  name: FootballArena['name'];
+  width: FootballArena['size'][0];
 };
 
 const columnHelper = createColumnHelper<TableColumns>();
 const defaultData: TableColumns[] = [
   {
-    name: "Arena 1",
-    city: "City 1",
-    width: 110,
+    city: 'City 1',
     height: 64,
+    name: 'Arena 1',
+    width: 110,
   },
   {
-    name: "Arena 2",
-    city: "City 2",
-    width: 111,
+    city: 'City 2',
     height: 65,
+    name: 'Arena 2',
+    width: 111,
   },
 ];
 
 const columns = [
-  columnHelper.accessor("name", {
-    id: "name",
+  columnHelper.accessor('name', {
+    cell: (value) => value.getValue(),
     header: () => <span>Name</span>,
-    cell: (value) => value.getValue(),
+    id: 'name',
   }),
-  columnHelper.accessor("city", {
-    id: "city",
+  columnHelper.accessor('city', {
+    cell: (value) => value.getValue(),
     header: () => <span>City</span>,
-    cell: (value) => value.getValue(),
+    id: 'city',
   }),
-  columnHelper.accessor("width", {
-    id: "width",
+  columnHelper.accessor('width', {
+    cell: (value) => value.getValue(),
     header: () => <span>Width</span>,
-    cell: (value) => value.getValue(),
+    id: 'width',
   }),
-  columnHelper.accessor("height", {
-    id: "height",
-    header: () => <span>Height</span>,
+  columnHelper.accessor('height', {
     cell: (value) => value.getValue(),
+    header: () => <span>Height</span>,
+    id: 'height',
   }),
 ];
 
-export default async function Results({
-  searchParams,
-}: {
-  searchParams: Record<string, string>;
-}) {
+export default async function Results({ searchParams }: { searchParams: Record<string, string> }) {
   const params = searchParams;
 
   return (
