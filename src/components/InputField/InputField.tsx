@@ -6,7 +6,7 @@ import * as styles from './inputField.css';
 export type InputFieldProps = {
   errors: ValidationError[];
   label: string;
-  onBlur: (event: FormEvent<HTMLInputElement>) => void;
+  onBlur?: (event: FormEvent<HTMLInputElement>) => void;
   onChange: (event: FormEvent<HTMLInputElement>) => void;
   value: string;
 };

@@ -1,23 +1,37 @@
 'use client';
 
 import type { SearchFormSchema } from '@/schemas/searchForm/searchForm';
-import type { FormEvent, ReactElement } from 'react';
+import type { FormEvent, ReactElement, Reducer } from 'react';
 import { useReducer } from 'react';
 
 import InputField from '@/components/InputField/InputField';
 import SelectBox from '@/components/SelectBox/SelectBox';
-import searchFormSchema from '@/schemas/searchForm/searchForm';
+import searchFormSchema, { units } from '@/schemas/searchForm/searchForm';
 import { ZodError } from 'zod';
 import SubmitButton from '../SubmitButton/SubmitButton';
 
 import * as styles from './FormWrapper.css';
 
-type FormValuesActionMap = {
-  type: Uppercase<keyof SearchFormSchema>,
-  payload: {
-    value: FormValuesActionMap['type'] extends 'amount' ? SearchFormSchema['amount'] : SearchFormSchema['unit'],
-  }
-}
+// action type for each field in state + reset function
+type ActionTypeNamesWithParameterTypes = {
+  [K in keyof SearchFormSchema as `UPDATE_${Uppercase<K>}`]: SearchFormSchema[K];
+} & {
+  RESET: never;
+};
+
+type FormValuesActionMap =
+  | {
+      type: Extract<keyof ActionTypeNamesWithParameterTypes, 'UPDATE_AMOUNT'>;
+      payload: ActionTypeNamesWithParameterTypes['UPDATE_AMOUNT'];
+    }
+  | {
+      type: Extract<keyof ActionTypeNamesWithParameterTypes, 'UPDATE_UNIT'>;
+      payload: ActionTypeNamesWithParameterTypes['UPDATE_UNIT'];
+    }
+  | {
+      type: Extract<keyof ActionTypeNamesWithParameterTypes, 'RESET'>;
+      payload: ActionTypeNamesWithParameterTypes['RESET'];
+    };
 
 const formValuesDefaultValues: SearchFormSchema = {
   amount: 1,
@@ -26,26 +40,33 @@ const formValuesDefaultValues: SearchFormSchema = {
 
 const formValuesReducer = (state: SearchFormSchema, action: FormValuesActionMap) => {
   switch (action.type) {
-    case 'AMOUNT': {
+    case 'UPDATE_AMOUNT': {
       return {
         ...state,
-        amount: action.payload.value,
-      }
+        amount: action.payload,
+      };
     }
-    case 'UNIT': {
+    case 'UPDATE_UNIT': {
       return {
         ...state,
-        unit: action.payload.value,
-      }
+        unit: action.payload,
+      };
+    }
+    case 'RESET': {
+      return {
+        ...formValuesDefaultValues,
+      };
     }
   }
 };
 
 function FormWrapper(): ReactElement {
-  const [formValues, dispatch] = useReducer(formValuesReducer, formValuesDefaultValues);
+  const [formValues, dispatchFormValues] = useReducer<Reducer<SearchFormSchema, FormValuesActionMap>>(formValuesReducer, formValuesDefaultValues);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault();
+
+    console.log(formValues);
   }
 
   return (
@@ -54,23 +75,43 @@ function FormWrapper(): ReactElement {
         <InputField
           errors={[]}
           label="Amount"
-          // name="amount"
-          onBlur={() => {}}
-          onChange={(event: FormEvent<HTMLInputElement>) => {}}
-          value='1'
+          onChange={(event: FormEvent<HTMLInputElement>) => {
+            const prevValue = formValues.amount;
+            const { value } = event.currentTarget;
+
+            let newValue: typeof formValues.amount = parseInt(event.currentTarget.value, 10) || prevValue;
+            if (value === '') {
+              newValue = 0;
+            }
+
+            dispatchFormValues({
+              type: 'UPDATE_AMOUNT',
+              payload: newValue,
+            });
+          }}
+          value={formValues.amount.toString()}
         />
         <SelectBox
           errors={[]}
           label="Unit"
-          // name="unit"
           onBlur={() => {}}
-          onChange={(event: FormEvent<HTMLSelectElement>) => {}}
+          onChange={(event: FormEvent<HTMLSelectElement>) => {
+            const { value } = event.currentTarget;
+
+            if (!units.includes(value)) {
+              return;
+            }
+
+            // value has now been narrowed to one of the const values
+            dispatchFormValues({
+              type: 'UPDATE_UNIT',
+              payload: value as typeof formValues.unit,
+            });
+          }}
           options={searchFormSchema.shape.unit.options}
-          value={'sqm'}
+          value={formValues.unit}
         />
-        <SubmitButton>
-          Calculate
-        </SubmitButton>
+        <SubmitButton>Calculate</SubmitButton>
       </div>
     </form>
   );
