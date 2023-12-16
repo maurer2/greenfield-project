@@ -17,13 +17,3 @@ export const wrapper = style({
   gridTemplateRows: 'max-content 1fr auto',
   padding: '2rem',
 });
-
-export const submitButton = style({
-  appearance: 'button',
-  background: 'var(--foreground-rgb)',
-  border: 0,
-  cursor: 'pointer',
-  fontSize: '1rem',
-  gridRow: '1/span 2',
-  padding: '0.5rem',
-});

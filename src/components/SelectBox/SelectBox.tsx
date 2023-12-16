@@ -1,14 +1,15 @@
 import type { ValidationError } from '@tanstack/react-form';
 import type { FormEvent, ReactElement } from 'react';
 
-import type { Unit } from '../FormWrapper/FormWrapper';
+import { Unit } from '@/schemas/searchForm/searchForm';
 
 import * as styles from './SelectBox.css';
 
 export type SelectBoxProps = {
   errors: ValidationError[];
   label: string;
-  onBlur: (event: FormEvent<HTMLSelectElement>) => void;
+  name: string;
+  onBlur?: (event: FormEvent<HTMLSelectElement>) => void;
   onChange: (event: FormEvent<HTMLSelectElement>) => void;
   options: Unit[];
   value: Unit;
@@ -17,6 +18,7 @@ export type SelectBoxProps = {
 function SelectBox({
   errors,
   label,
+  name,
   onBlur,
   onChange,
   options,
@@ -24,13 +26,13 @@ function SelectBox({
 }: SelectBoxProps): ReactElement {
   return (
     <div className={styles.fieldWrapper}>
-      <label className={styles.label} htmlFor="select">
+      <label className={styles.label} htmlFor={name}>
         {label}
       </label>
       <select
         className={styles.select}
-        id="select"
-        name="select"
+        id={name}
+        name={name}
         onBlur={onBlur}
         onChange={onChange}
         value={value}

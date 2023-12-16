@@ -6,24 +6,25 @@ import * as styles from './inputField.css';
 export type InputFieldProps = {
   errors: ValidationError[];
   label: string;
-  onBlur: (event: FormEvent<HTMLInputElement>) => void;
+  name: string;
+  onBlur?: (event: FormEvent<HTMLInputElement>) => void;
   onChange: (event: FormEvent<HTMLInputElement>) => void;
   value: string;
 };
 
-function InputField({ errors, label, onBlur, onChange, value }: InputFieldProps): ReactElement {
+function InputField({ errors, label, name, onBlur, onChange, value }: InputFieldProps): ReactElement {
   return (
     <div className={styles.fieldWrapper}>
-      <label className={styles.label} htmlFor="input">
+      <label className={styles.label} htmlFor={name}>
         {label}
       </label>
       <input
         className={styles.input}
-        id="input"
-        name="input"
+        id={name}
+        name={name}
         onBlur={onBlur}
         onChange={onChange}
-        placeholder="Input value"
+        placeholder={`Enter ${label}`}
         type="text"
         value={value}
       />
