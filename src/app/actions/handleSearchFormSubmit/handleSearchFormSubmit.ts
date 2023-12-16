@@ -7,13 +7,13 @@ import searchFormSchema from '@/schemas/searchForm/searchForm';
 export async function handleSearchFormSubmit(formValuesEncoded: FormData) {
   await setTimeout(1000);
 
-  const amount = formValuesEncoded.get("amount");
-  const unit = formValuesEncoded.get("unit");
+  const amount = formValuesEncoded.get('amount');
+  const unit = formValuesEncoded.get('unit');
 
   try {
     const formValues: SearchFormSchema = searchFormSchema.parse({
       amount,
-      unit
+      unit,
     });
     console.log(`Valid form values received: ${JSON.stringify(formValues, null, 4)}`);
 

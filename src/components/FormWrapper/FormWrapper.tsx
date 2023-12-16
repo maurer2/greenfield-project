@@ -13,33 +13,25 @@ import { ZodError } from 'zod';
 
 import * as styles from './FormWrapper.css';
 
-// action type for each field in state + reset function
-type ActionTypeNamesWithParameterTypes = {
-  [K in keyof SearchFormSchema as `UPDATE_${Uppercase<K>}`]: SearchFormSchema[K];
+type FormValuesActionsMap = {
+  [K in keyof SearchFormSchema]: {
+    type: `UPDATE_${Uppercase<K>}`
+    payload: SearchFormSchema[K],
+  };
 } & {
-  RESET: never;
+  reset: {
+    type: 'RESET'
+    payload: never;
+  }
 };
-
-type FormValuesActionMap =
-  | {
-      type: Extract<keyof ActionTypeNamesWithParameterTypes, 'UPDATE_AMOUNT'>;
-      payload: ActionTypeNamesWithParameterTypes['UPDATE_AMOUNT'];
-    }
-  | {
-      type: Extract<keyof ActionTypeNamesWithParameterTypes, 'UPDATE_UNIT'>;
-      payload: ActionTypeNamesWithParameterTypes['UPDATE_UNIT'];
-    }
-  | {
-      type: Extract<keyof ActionTypeNamesWithParameterTypes, 'RESET'>;
-      payload: ActionTypeNamesWithParameterTypes['RESET'];
-    };
+type FormValuesActions = FormValuesActionsMap[keyof FormValuesActionsMap];
 
 const formValuesDefaultValues: SearchFormSchema = {
   amount: 1,
   unit: 'sqm',
 };
 
-const formValuesReducer = (state: SearchFormSchema, action: FormValuesActionMap) => {
+const formValuesReducer = (state: SearchFormSchema, action: FormValuesActions) => {
   switch (action.type) {
     case 'UPDATE_AMOUNT': {
       return {
@@ -62,7 +54,7 @@ const formValuesReducer = (state: SearchFormSchema, action: FormValuesActionMap)
 };
 
 function FormWrapper(): ReactElement {
-  const [formValues, dispatchFormValues] = useReducer<Reducer<SearchFormSchema, FormValuesActionMap>>(formValuesReducer, formValuesDefaultValues);
+  const [formValues, dispatchFormValues] = useReducer<Reducer<SearchFormSchema, FormValuesActions>>(formValuesReducer, formValuesDefaultValues);
 
   return (
     <form action={handleSearchFormSubmit} className={styles.form}>
