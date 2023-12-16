@@ -9,7 +9,7 @@ export type SubmitButtonProps = {
 };
 
 function SubmitButton({ children }: PropsWithChildren): ReactElement {
-  const { pending } = useFormStatus();
+  const { pending, data } = useFormStatus();
 
   return (
     <button className={styles.submitButton} disabled={pending} type="submit">

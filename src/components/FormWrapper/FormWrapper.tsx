@@ -7,8 +7,9 @@ import { useReducer } from 'react';
 import InputField from '@/components/InputField/InputField';
 import SelectBox from '@/components/SelectBox/SelectBox';
 import searchFormSchema, { units } from '@/schemas/searchForm/searchForm';
-import { ZodError } from 'zod';
 import SubmitButton from '../SubmitButton/SubmitButton';
+import { handleSearchFormSubmit } from '@/app/actions/handleSearchFormSubmit/handleSearchFormSubmit';
+import { ZodError } from 'zod';
 
 import * as styles from './FormWrapper.css';
 
@@ -63,18 +64,13 @@ const formValuesReducer = (state: SearchFormSchema, action: FormValuesActionMap)
 function FormWrapper(): ReactElement {
   const [formValues, dispatchFormValues] = useReducer<Reducer<SearchFormSchema, FormValuesActionMap>>(formValuesReducer, formValuesDefaultValues);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>): void {
-    event.preventDefault();
-
-    console.log(formValues);
-  }
-
   return (
-    <form action="" className={styles.form} onSubmit={handleSubmit}>
+    <form action={handleSearchFormSubmit} className={styles.form}>
       <div className={styles.wrapper}>
         <InputField
           errors={[]}
           label="Amount"
+          name="amount"
           onChange={(event: FormEvent<HTMLInputElement>) => {
             const prevValue = formValues.amount;
             const { value } = event.currentTarget;
@@ -94,6 +90,7 @@ function FormWrapper(): ReactElement {
         <SelectBox
           errors={[]}
           label="Unit"
+          name="unit"
           onBlur={() => {}}
           onChange={(event: FormEvent<HTMLSelectElement>) => {
             const { value } = event.currentTarget;
