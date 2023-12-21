@@ -1,8 +1,9 @@
 'use server';
 
-import { setTimeout } from 'node:timers/promises';
 import type { SearchFormSchema } from '@/schemas/searchForm/searchForm';
+
 import searchFormSchema from '@/schemas/searchForm/searchForm';
+import { setTimeout } from 'node:timers/promises';
 
 export async function handleSearchFormSubmit(formValuesEncoded: FormData) {
   await setTimeout(1000);
@@ -17,11 +18,11 @@ export async function handleSearchFormSubmit(formValuesEncoded: FormData) {
     });
     console.log(`Valid form values received: ${JSON.stringify(formValues, null, 4)}`);
 
-    return Promise.resolve('Success'); // todo
+    return await Promise.resolve('Success'); // todo
   } catch (error) {
     console.log('Invalid form values received');
     console.log(error);
 
-    return Promise.reject('Error'); // todo
+    return Promise.reject(new Error('Error')); // todo
   }
 }
