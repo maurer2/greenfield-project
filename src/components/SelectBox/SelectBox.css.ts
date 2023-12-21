@@ -5,18 +5,32 @@ export const fieldWrapper = style({
 });
 
 export const label = style({
-  gridRowEnd: 1,
-  gridRowStart: 1,
+  '@media': {
+    'screen and (min-width: 480px)': {
+      gridRowEnd: 1,
+      gridRowStart: 1,
+    },
+  },
 });
 
 export const select = style({
   fontSize: '1rem',
-  gridRowEnd: 2,
-  gridRowStart: 2,
   padding: '0.5rem',
+
+  // eslint-disable-next-line perfectionist/sort-objects
+  '@media': {
+    'screen and (min-width: 480px)': {
+      gridRowEnd: 2,
+      gridRowStart: 2,
+    },
+  },
 });
 
 export const errors = style({
-  gridRowEnd: 3,
-  gridRowStart: 3,
+  '@media': {
+    'screen and (min-width: 480px)': {
+      gridRowEnd: 3,
+      gridRowStart: 3,
+    },
+  },
 });

@@ -2,27 +2,26 @@
 
 import type { SearchFormSchema } from '@/schemas/searchForm/searchForm';
 import type { FormEvent, ReactElement, Reducer } from 'react';
-import { useReducer } from 'react';
 
+import { handleSearchFormSubmit } from '@/app/actions/handleSearchFormSubmit/handleSearchFormSubmit';
 import InputField from '@/components/InputField/InputField';
 import SelectBox from '@/components/SelectBox/SelectBox';
 import searchFormSchema, { units } from '@/schemas/searchForm/searchForm';
-import SubmitButton from '../SubmitButton/SubmitButton';
-import { handleSearchFormSubmit } from '@/app/actions/handleSearchFormSubmit/handleSearchFormSubmit';
-import { ZodError } from 'zod';
+import { useReducer } from 'react';
 
+import SubmitButton from '../SubmitButton/SubmitButton';
 import * as styles from './FormWrapper.css';
 
 type FormValuesActionsMap = {
   [K in keyof SearchFormSchema]: {
-    type: `UPDATE_${Uppercase<K>}`
-    payload: SearchFormSchema[K],
+    payload: SearchFormSchema[K];
+    type: `UPDATE_${Uppercase<K>}`;
   };
 } & {
   reset: {
-    type: 'RESET'
     payload: never;
-  }
+    type: 'RESET';
+  };
 };
 type FormValuesActions = FormValuesActionsMap[keyof FormValuesActionsMap];
 
@@ -50,11 +49,19 @@ const formValuesReducer = (state: SearchFormSchema, action: FormValuesActions) =
         ...formValuesDefaultValues,
       };
     }
+    default: {
+      return {
+        ...state,
+      };
+    }
   }
 };
 
 function FormWrapper(): ReactElement {
-  const [formValues, dispatchFormValues] = useReducer<Reducer<SearchFormSchema, FormValuesActions>>(formValuesReducer, formValuesDefaultValues);
+  const [formValues, dispatchFormValues] = useReducer<Reducer<SearchFormSchema, FormValuesActions>>(
+    formValuesReducer,
+    formValuesDefaultValues,
+  );
 
   return (
     <form action={handleSearchFormSubmit} className={styles.form}>
@@ -67,14 +74,15 @@ function FormWrapper(): ReactElement {
             const prevValue = formValues.amount;
             const { value } = event.currentTarget;
 
-            let newValue: typeof formValues.amount = parseInt(event.currentTarget.value, 10) || prevValue;
+            let newValue: typeof formValues.amount =
+              parseInt(event.currentTarget.value, 10) || prevValue;
             if (value === '') {
               newValue = 0;
             }
 
             dispatchFormValues({
-              type: 'UPDATE_AMOUNT',
               payload: newValue,
+              type: 'UPDATE_AMOUNT',
             });
           }}
           value={formValues.amount.toString()}
@@ -93,8 +101,8 @@ function FormWrapper(): ReactElement {
 
             // value has now been narrowed to one of the const values
             dispatchFormValues({
-              type: 'UPDATE_UNIT',
               payload: value as typeof formValues.unit,
+              type: 'UPDATE_UNIT',
             });
           }}
           options={searchFormSchema.shape.unit.options}
