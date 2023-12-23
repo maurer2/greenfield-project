@@ -1,5 +1,6 @@
 'use client';
 
+import type { SearchFormSubmitActionResult } from '@/app/actions/handleSearchFormSubmit/handleSearchFormSubmit';
 import type { SearchFormSchema } from '@/schemas/searchForm/searchForm';
 import type { FormEvent, ReactElement, Reducer } from 'react';
 
@@ -57,12 +58,18 @@ const formValuesReducer = (state: SearchFormSchema, action: FormValuesActions) =
   }
 };
 
-function FormContent(): ReactElement {
+type FormContentProps = {
+  formState: SearchFormSubmitActionResult;
+};
+
+function FormContent({ formState }: FormContentProps): ReactElement {
   const [formValues, dispatchFormValues] = useReducer<Reducer<SearchFormSchema, FormValuesActions>>(
     formValuesReducer,
     formValuesDefaultValues,
   );
   const { pending } = useFormStatus();
+
+  console.log(formState);
 
   return (
     <div className={styles.wrapper}>
