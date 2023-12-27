@@ -12,7 +12,14 @@ export type InputFieldProps = {
   value: string;
 };
 
-function InputField({ errors, label, name, onBlur, onChange, value }: InputFieldProps): ReactElement {
+function InputField({
+  errors,
+  label,
+  name,
+  onBlur,
+  onChange,
+  value,
+}: InputFieldProps): ReactElement {
   return (
     <div className={styles.fieldWrapper}>
       <label className={styles.label} htmlFor={name}>

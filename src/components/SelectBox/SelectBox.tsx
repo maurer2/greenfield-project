@@ -1,7 +1,6 @@
+import type { Unit } from '@/schemas/searchForm/searchForm';
 import type { ValidationError } from '@tanstack/react-form';
 import type { FormEvent, ReactElement } from 'react';
-
-import { Unit } from '@/schemas/searchForm/searchForm';
 
 import * as styles from './SelectBox.css';
 

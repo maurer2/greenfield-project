@@ -13,10 +13,11 @@ export type SearchFormSubmitActionResult =
       status: 'error';
     }
   | {
-      status: 'idle';
+      hasBeenSubmittedPreviously?: boolean;
+      status: 'success';
     }
   | {
-      status: 'success';
+      status: 'idle';
     };
 
 export async function handleSearchFormSubmit(

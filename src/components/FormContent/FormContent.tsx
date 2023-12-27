@@ -25,6 +25,9 @@ type FormValuesActionsMap = {
   };
 };
 type FormValuesActions = FormValuesActionsMap[keyof FormValuesActionsMap];
+type FormContentProps = {
+  formState: SearchFormSubmitActionResult;
+};
 
 const formValuesDefaultValues: SearchFormSchema = {
   amount: 1,
@@ -56,10 +59,6 @@ const formValuesReducer = (state: SearchFormSchema, action: FormValuesActions) =
       };
     }
   }
-};
-
-type FormContentProps = {
-  formState: SearchFormSubmitActionResult;
 };
 
 function FormContent({ formState }: FormContentProps): ReactElement {
