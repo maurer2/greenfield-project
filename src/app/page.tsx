@@ -1,3 +1,5 @@
+'use client';
+
 import Background from '@/components/Background/Background';
 import FormContent from '@/components/FormContent/FormContent';
 import FormWrapper from '@/components/FormWrapper/FormWrapper';
@@ -9,7 +11,8 @@ export default function Home() {
     <main className={styles.page}>
       <Background />
       <FormWrapper>
-        <FormContent />
+        {/* // eslint-disable-next-line prettier/prettier */}
+        {({ formState }) => <FormContent formState={formState} />}
       </FormWrapper>
     </main>
   );

@@ -25,7 +25,8 @@ type FormValuesActionsMap = {
   };
 };
 type FormValuesActions = FormValuesActionsMap[keyof FormValuesActionsMap];
-type FormContentProps = {
+
+export type FormContentProps = {
   formState: SearchFormSubmitActionResult;
 };
 
