@@ -17,3 +17,7 @@ export const wrapper = style({
     },
   },
 });
+
+export const output = style({
+  gridColumn: '1/-1',
+});

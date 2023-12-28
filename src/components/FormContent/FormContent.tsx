@@ -9,6 +9,7 @@ import SelectBox from '@/components/SelectBox/SelectBox';
 import searchFormSchema, { units } from '@/schemas/searchForm/searchForm';
 import { useReducer } from 'react';
 import { useFormStatus } from 'react-dom';
+import { deserializeError } from 'serialize-error';
 
 import SubmitButton from '../SubmitButton/SubmitButton';
 import * as styles from './FormContent.css';
@@ -69,7 +70,8 @@ function FormContent({ formState }: FormContentProps): ReactElement {
   );
   const { pending } = useFormStatus();
 
-  console.log(formState);
+  const hasErrors = formState.status === 'error' && Boolean(deserializeError(formState.errors));
+  const hasSuccess = formState.status === 'success';
 
   return (
     <div className={styles.wrapper}>
@@ -116,6 +118,10 @@ function FormContent({ formState }: FormContentProps): ReactElement {
         value={formValues.unit}
       />
       <SubmitButton isDisabled={pending}>Calculate</SubmitButton>
+      {hasErrors && !pending && (
+        <output className={styles.output}>{deserializeError(formState.errors[0]).message}</output>
+      )}
+      {hasSuccess && !pending && <output className={styles.output}>Sending OK</output>}
     </div>
   );
 }

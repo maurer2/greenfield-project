@@ -5,15 +5,16 @@ import type { ErrorObject } from 'serialize-error';
 
 import searchFormSchema from '@/schemas/searchForm/searchForm';
 import { setTimeout } from 'node:timers/promises';
-import { deserializeError, serializeError } from 'serialize-error';
+import { serializeError } from 'serialize-error';
+import { ZodError } from 'zod';
 
 export type SearchFormSubmitActionResult =
   | {
-      error: ErrorObject[];
+      errors: ErrorObject[];
       status: 'error';
     }
   | {
-      hasBeenSubmittedPreviously?: boolean;
+      hasBeenSubmittedSuccessfullyBefore?: boolean;
       status: 'success';
     }
   | {
@@ -21,31 +22,36 @@ export type SearchFormSubmitActionResult =
     };
 
 export async function handleSearchFormSubmit(
-  _,
+  prevSearchFormSubmitActionResult: SearchFormSubmitActionResult,
   formData: FormData,
 ): Promise<SearchFormSubmitActionResult> {
   await setTimeout(1000);
 
-  // const amount = formValuesEncoded.get('amount');
-  // const unit = formValuesEncoded.get('unit');
-  console.log('formData', formData);
+  const amount = formData.get('amount');
+  const unit = formData.get('unit');
 
-  return { status: 'success' };
+  if (!amount || !unit) {
+    return { errors: [serializeError(new Error('Amount or Unit value missing'))], status: 'error' };
+  }
 
-  // return { error: [serializeError(new Error('test'))], status: 'error' };
+  try {
+    const formValues: SearchFormSchema = searchFormSchema.parse({
+      amount,
+      unit,
+    });
+    console.log(`Valid form values received: ${JSON.stringify(formValues, null, 4)}`);
 
-  // try {
-  //   const formValues: SearchFormSchema = searchFormSchema.parse({
-  //     amount,
-  //     // unit,
-  //   });
-  //   console.log(`Valid form values received: ${JSON.stringify(formValues, null, 4)}`);
+    return {
+      hasBeenSubmittedSuccessfullyBefore: prevSearchFormSubmitActionResult?.status === 'success',
+      status: 'success',
+    };
+  } catch (error) {
+    if (error instanceof ZodError) {
+      const errors = error.flatten();
 
-  //   return await Promise.resolve('Success'); // todo
-  // } catch (error) {
-  //   console.log('Invalid form values received');
-  //   console.log(error);
+      return { errors: [serializeError(errors)], status: 'error' };
+    }
 
-  //   return Promise.reject(new Error('Error')); // todo
-  // }
+    return { errors: [serializeError(new Error('Unknown error'))], status: 'error' };
+  }
 }
