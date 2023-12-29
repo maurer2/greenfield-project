@@ -28,6 +28,9 @@ export const input = style({
 });
 
 export const errors = style({
+  gridColumnStart: 1,
+
+  // eslint-disable-next-line perfectionist/sort-objects
   '@media': {
     'screen and (min-width: 480px)': {
       gridRowEnd: 3,

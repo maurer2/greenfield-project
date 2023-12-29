@@ -1,6 +1,6 @@
 'use server';
 
-import type { SearchFormSchema } from '@/schemas/searchForm/searchForm';
+import type { SearchFormErrors, SearchFormSchema } from '@/schemas/searchForm/searchForm';
 import type { ErrorObject } from 'serialize-error';
 
 import searchFormSchema from '@/schemas/searchForm/searchForm';
@@ -10,8 +10,12 @@ import { ZodError } from 'zod';
 
 export type SearchFormSubmitActionResult =
   | {
-      errors: ErrorObject[];
+      error: ErrorObject;
       status: 'error';
+    }
+  | {
+      errors: SearchFormErrors;
+      status: 'validation-fail';
     }
   | {
       hasBeenSubmittedSuccessfullyBefore?: boolean;
@@ -31,7 +35,10 @@ export async function handleSearchFormSubmit(
   const unit = formData.get('unit');
 
   if (!amount || !unit) {
-    return { errors: [serializeError(new Error('Amount or Unit value missing'))], status: 'error' };
+    return {
+      error: serializeError(new Error('"Amount" or "Unit" value missing.')),
+      status: 'error',
+    };
   }
 
   try {
@@ -47,11 +54,11 @@ export async function handleSearchFormSubmit(
     };
   } catch (error) {
     if (error instanceof ZodError) {
-      const errors = error.flatten();
+      const searchFormErrors: SearchFormErrors = error.flatten();
 
-      return { errors: [serializeError(errors)], status: 'error' };
+      return { errors: searchFormErrors, status: 'validation-fail' };
     }
 
-    return { errors: [serializeError(new Error('Unknown error'))], status: 'error' };
+    return { error: serializeError(new Error('Unknown error.')), status: 'error' };
   }
 }

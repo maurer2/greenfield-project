@@ -28,4 +28,6 @@ const searchFormSchema = z
   .strict();
 
 export default searchFormSchema;
+
 export type SearchFormSchema = z.infer<typeof searchFormSchema>;
+export type SearchFormErrors = z.inferFlattenedErrors<typeof searchFormSchema>;

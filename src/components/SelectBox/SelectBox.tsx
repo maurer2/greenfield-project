@@ -1,11 +1,10 @@
 import type { Unit } from '@/schemas/searchForm/searchForm';
-import type { ValidationError } from '@tanstack/react-form';
 import type { FormEvent, ReactElement } from 'react';
 
 import * as styles from './SelectBox.css';
 
 export type SelectBoxProps = {
-  errors: ValidationError[];
+  errors?: string[];
   label: string;
   name: string;
   onBlur?: (event: FormEvent<HTMLSelectElement>) => void;
@@ -42,7 +41,13 @@ function SelectBox({
           </option>
         ))}
       </select>
-      {Boolean(errors.length) && <p className={styles.errors}>{errors}</p>}
+      {errors && errors?.length > 0 && (
+        <div className={styles.errors}>
+          {errors.map((error) => (
+            <p key={error}>{error}</p>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

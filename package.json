@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@svgr/webpack": "^8.1.0",
-    "@tanstack/react-form": "^0.9.0",
     "@tanstack/react-table": "^8.10.7",
     "@tanstack/zod-form-adapter": "^0.9.0",
     "@total-typescript/ts-reset": "^0.5.1",

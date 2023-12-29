@@ -70,13 +70,14 @@ function FormContent({ formState }: FormContentProps): ReactElement {
   );
   const { pending } = useFormStatus();
 
-  const hasErrors = formState.status === 'error' && Boolean(deserializeError(formState.errors));
-  const hasSuccess = formState.status === 'success';
+  const isError = formState.status === 'error';
+  const isFailedValidation = formState.status === 'validation-fail';
+  const isSuccess = formState.status === 'success';
 
   return (
     <div className={styles.wrapper}>
       <InputField
-        errors={[]}
+        errors={isFailedValidation ? formState.errors.fieldErrors?.amount : undefined}
         label="Amount"
         name="amount"
         onChange={(event: FormEvent<HTMLInputElement>) => {
@@ -97,7 +98,7 @@ function FormContent({ formState }: FormContentProps): ReactElement {
         value={formValues.amount.toString()}
       />
       <SelectBox
-        errors={[]}
+        errors={isFailedValidation ? formState.errors.fieldErrors?.unit : undefined}
         label="Unit"
         name="unit"
         onBlur={() => {}}
@@ -118,10 +119,10 @@ function FormContent({ formState }: FormContentProps): ReactElement {
         value={formValues.unit}
       />
       <SubmitButton isDisabled={pending}>Calculate</SubmitButton>
-      {hasErrors && !pending && (
-        <output className={styles.output}>{deserializeError(formState.errors[0]).message}</output>
+      {isError && !pending && (
+        <output className={styles.output}>{deserializeError(formState.error).message}</output>
       )}
-      {hasSuccess && !pending && <output className={styles.output}>Sending OK</output>}
+      {isSuccess && !pending && <output className={styles.output}>Submit successful</output>}
     </div>
   );
 }
