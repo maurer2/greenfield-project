@@ -38,6 +38,12 @@ dependencies:
   '@vanilla-extract/next-plugin':
     specifier: ^2.3.2
     version: 2.3.2(@types/node@20.9.1)(next@14.0.3)(webpack@5.89.0)
+  animate.css:
+    specifier: ^4.1.1
+    version: 4.1.1
+  clsx:
+    specifier: ^2.0.0
+    version: 2.0.0
   eslint:
     specifier: ^8.53.0
     version: 8.53.0
@@ -2649,6 +2655,10 @@ packages:
       uri-js: 4.4.1
     dev: false
 
+  /animate.css@4.1.1:
+    resolution: {integrity: sha512-+mRmCTv6SbCmtYJCN4faJMNFVNN5EuCTTprDTAo7YzIGji2KADmakjVA3+8mVDkZ2Bf09vayB35lSQIex2+QaQ==}
+    dev: false
+
   /ansi-regex@5.0.1:
     resolution: {integrity: sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==}
     engines: {node: '>=8'}
@@ -2949,6 +2959,11 @@ packages:
 
   /client-only@0.0.1:
     resolution: {integrity: sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==}
+    dev: false
+
+  /clsx@2.0.0:
+    resolution: {integrity: sha512-rQ1+kcj+ttHG0MKVGBUXwayCCF1oh39BF5COIpRzuCEv8Mwjv0XucrI2ExNTOn9IlLifGClWQcU9BrZORvtw6Q==}
+    engines: {node: '>=6'}
     dev: false
 
   /color-convert@1.9.3:

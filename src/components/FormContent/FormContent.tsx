@@ -7,6 +7,8 @@ import type { FormEvent, ReactElement, Reducer } from 'react';
 import InputField from '@/components/InputField/InputField';
 import SelectBox from '@/components/SelectBox/SelectBox';
 import searchFormSchema, { units } from '@/schemas/searchForm/searchForm';
+import 'animate.css';
+import clsx from 'clsx';
 import { useReducer } from 'react';
 import { useFormStatus } from 'react-dom';
 import { deserializeError } from 'serialize-error';
@@ -75,7 +77,12 @@ function FormContent({ formState }: FormContentProps): ReactElement {
   const isSuccess = formState.status === 'success';
 
   return (
-    <div className={styles.wrapper}>
+    <div
+      className={clsx(
+        styles.wrapper,
+        pending && 'animate__animated animate__infinite animate__pulse',
+      )}
+    >
       <InputField
         errors={isFailedValidation ? formState.errors.fieldErrors?.amount : undefined}
         label="Amount"

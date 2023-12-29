@@ -29,7 +29,7 @@ export async function handleSearchFormSubmit(
   prevSearchFormSubmitActionResult: SearchFormSubmitActionResult,
   formData: FormData,
 ): Promise<SearchFormSubmitActionResult> {
-  await setTimeout(1000);
+  await setTimeout(1500);
 
   const amount = formData.get('amount');
   const unit = formData.get('unit');
