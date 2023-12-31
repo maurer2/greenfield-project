@@ -4,6 +4,7 @@ import type { SearchFormErrors, SearchFormSchema } from '@/schemas/searchForm/se
 import type { ErrorObject } from 'serialize-error';
 
 import searchFormSchema from '@/schemas/searchForm/searchForm';
+import { redirect } from 'next/navigation';
 import { setTimeout } from 'node:timers/promises';
 import { serializeError } from 'serialize-error';
 import { ZodError } from 'zod';
@@ -25,11 +26,14 @@ export type SearchFormSubmitActionResult =
       status: 'idle';
     };
 
+// eslint-disable-next-line consistent-return
 export async function handleSearchFormSubmit(
   prevSearchFormSubmitActionResult: SearchFormSubmitActionResult,
   formData: FormData,
-): Promise<SearchFormSubmitActionResult> {
+): Promise<SearchFormSubmitActionResult | undefined> {
   await setTimeout(1500);
+
+  let isSuccess = false;
 
   const amount = formData.get('amount');
   const unit = formData.get('unit');
@@ -47,12 +51,14 @@ export async function handleSearchFormSubmit(
       unit,
     });
     console.log(`Valid form values received: ${JSON.stringify(formValues, null, 4)}`);
+    isSuccess = true;
 
-    return {
-      hasBeenSubmittedSuccessfullyBefore: prevSearchFormSubmitActionResult?.status === 'success',
-      status: 'success',
-    };
+    // return {
+    //   hasBeenSubmittedSuccessfullyBefore: prevSearchFormSubmitActionResult?.status === 'success',
+    //   status: 'success',
+    // };
   } catch (error) {
+    console.log(error);
     if (error instanceof ZodError) {
       const searchFormErrors: SearchFormErrors = error.flatten();
 
@@ -60,5 +66,10 @@ export async function handleSearchFormSubmit(
     }
 
     return { error: serializeError(new Error('Unknown error.')), status: 'error' };
+  }
+
+  // https://github.com/vercel/next.js/issues/55586#issuecomment-1869024539
+  if (isSuccess) {
+    redirect('/calculated-results');
   }
 }
