@@ -6,7 +6,3 @@ export const wrapper = style({
   padding: '2rem',
   position: 'relative',
 });
-
-export const backLink = style({
-  display: 'block',
-});
