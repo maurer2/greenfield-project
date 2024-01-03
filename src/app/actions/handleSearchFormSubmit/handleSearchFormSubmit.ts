@@ -26,14 +26,11 @@ export type SearchFormSubmitActionResult =
       status: 'idle';
     };
 
-// eslint-disable-next-line consistent-return
 export async function handleSearchFormSubmit(
   prevSearchFormSubmitActionResult: SearchFormSubmitActionResult,
   formData: FormData,
-): Promise<SearchFormSubmitActionResult | undefined> {
+): Promise<SearchFormSubmitActionResult> {
   await setTimeout(1500);
-
-  let isSuccess = false;
 
   const amount = formData.get('amount');
   const unit = formData.get('unit');
@@ -51,25 +48,31 @@ export async function handleSearchFormSubmit(
       unit,
     });
     console.log(`Valid form values received: ${JSON.stringify(formValues, null, 4)}`);
-    isSuccess = true;
+    const queryParams = new URLSearchParams({
+      amount: amount.toString(),
+      unit: unit.toString(),
+    }).toString();
+
+    return redirect(`/calculated-results?${queryParams}`);
 
     // return {
     //   hasBeenSubmittedSuccessfullyBefore: prevSearchFormSubmitActionResult?.status === 'success',
     //   status: 'success',
     // };
   } catch (error) {
-    console.log(error);
     if (error instanceof ZodError) {
       const searchFormErrors: SearchFormErrors = error.flatten();
 
       return { errors: searchFormErrors, status: 'validation-fail' };
     }
 
-    return { error: serializeError(new Error('Unknown error.')), status: 'error' };
-  }
+    if (error instanceof Error) {
+      // https://github.com/vercel/next.js/issues/55586#issuecomment-1869419142
+      if (error?.message === 'NEXT_REDIRECT') {
+        throw error;
+      }
+    }
 
-  // https://github.com/vercel/next.js/issues/55586#issuecomment-1869024539
-  if (isSuccess) {
-    redirect('/calculated-results');
+    return { error: serializeError(new Error('Unknown error.')), status: 'error' };
   }
 }
