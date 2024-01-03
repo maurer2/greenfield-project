@@ -18,13 +18,7 @@ export type SearchFormSubmitActionResult =
       errors: SearchFormErrors;
       status: 'validation-fail';
     }
-  | {
-      hasBeenSubmittedSuccessfullyBefore?: boolean;
-      status: 'success';
-    }
-  | {
-      status: 'idle';
-    };
+  | null;
 
 export async function handleSearchFormSubmit(
   prevSearchFormSubmitActionResult: SearchFormSubmitActionResult,
@@ -48,17 +42,13 @@ export async function handleSearchFormSubmit(
       unit,
     });
     console.log(`Valid form values received: ${JSON.stringify(formValues, null, 4)}`);
+
     const queryParams = new URLSearchParams({
       amount: amount.toString(),
       unit: unit.toString(),
-    }).toString();
+    });
 
-    return redirect(`/calculated-results?${queryParams}`);
-
-    // return {
-    //   hasBeenSubmittedSuccessfullyBefore: prevSearchFormSubmitActionResult?.status === 'success',
-    //   status: 'success',
-    // };
+    return redirect(`/calculated-results?${queryParams.toString()}`);
   } catch (error) {
     if (error instanceof ZodError) {
       const searchFormErrors: SearchFormErrors = error.flatten();

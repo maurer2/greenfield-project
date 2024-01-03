@@ -72,9 +72,8 @@ function FormContent({ formState }: FormContentProps): ReactElement {
   );
   const { pending } = useFormStatus();
 
-  const isError = formState.status === 'error';
-  const isFailedValidation = formState.status === 'validation-fail';
-  const isSuccess = formState.status === 'success';
+  const isError = formState?.status === 'error';
+  const isFailedValidation = formState?.status === 'validation-fail';
 
   return (
     <div
@@ -129,7 +128,6 @@ function FormContent({ formState }: FormContentProps): ReactElement {
       {isError && !pending && (
         <output className={styles.output}>{deserializeError(formState.error).message}</output>
       )}
-      {isSuccess && !pending && <output className={styles.output}>Submit successful</output>}
     </div>
   );
 }
