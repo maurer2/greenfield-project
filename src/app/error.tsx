@@ -1,4 +1,8 @@
-'use client'
+'use client';
+
+import Link from 'next/link';
+
+import * as styles from './error.css';
 
 type ErrorPageProps = {
   error: Error & { digest?: string };
@@ -7,7 +11,7 @@ type ErrorPageProps = {
 
 export default function Error({ error, reset }: ErrorPageProps) {
   return (
-    <div>
+    <div className={styles.wrapper}>
       <h2>Error</h2>
       <div>
         <code>{error.message}</code>
