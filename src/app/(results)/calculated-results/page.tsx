@@ -1,22 +1,40 @@
+import ComparisonList from '@/components/ComparisonList/ComparisonList';
 import Link from 'next/link';
 
 import * as styles from './page.css';
 
-export default async function Results({ searchParams }: { searchParams: Record<string, string> }) {
-  const params = searchParams;
+const conversionFactorFeetToMetre = 10.764;
+const areaFootballPitch = 105 * 68; // 7140
 
+export default async function Results({ searchParams }: { searchParams: Record<string, string> }) {
   const { amount, unit } = searchParams;
 
   // trigger nearest error.tsx
   if (!amount?.length || !unit?.length) {
-    throw new Error('Invalid query params.');
+    throw new Error('Missing or invalid query params.');
   }
+
+  const isMetric = unit === 'sqm';
+  const amountInMetric = isMetric
+    ? parseInt(amount, 10)
+    : parseInt(amount, 10) * conversionFactorFeetToMetre;
+
+  if (Number.isNaN(amountInMetric)) {
+    throw new Error('Amount is not number-like.');
+  }
+
+  const amountCalculatedInPercent = (amountInMetric * 100) / areaFootballPitch;
+  const amountCalculatedInDecimals = amountCalculatedInPercent / 100;
 
   return (
     <div className={styles.wrapper}>
-      <h1>Results for </h1>
+      <h2>Calculated Results</h2>
 
-      <code>{JSON.stringify(params)}</code>
+      <ComparisonList
+        amount={amount}
+        amountCalculatedInDecimals={amountCalculatedInDecimals}
+        unit={unit}
+      />
 
       <Link className={styles.backLink} href="/">
         Back
