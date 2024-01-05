@@ -17,7 +17,7 @@ export default async function Results({ searchParams }: { searchParams: Record<s
   const isMetric = unit === 'sqm';
   const amountInMetric = isMetric
     ? parseInt(amount, 10)
-    : parseInt(amount, 10) * conversionFactorFeetToMetre;
+    : parseInt(amount, 10) / conversionFactorFeetToMetre;
 
   if (Number.isNaN(amountInMetric)) {
     throw new Error('Amount is not number-like.');
