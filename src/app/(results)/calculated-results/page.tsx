@@ -6,7 +6,11 @@ import * as styles from './page.css';
 const conversionFactorFeetToMetre = 10.764;
 const areaFootballPitch = 105 * 68; // 7140
 
-export default async function Results({ searchParams }: { searchParams: Record<string, string> }) {
+type Page = {
+  searchParams: Record<string, string>;
+};
+
+export default async function Results({ searchParams }: Page) {
   const { amount, unit } = searchParams;
 
   // trigger nearest error.tsx
