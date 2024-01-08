@@ -1,11 +1,7 @@
+import { formatList } from '@/helpers/listformatter/listformatter';
 import { z } from 'zod';
 
-export function listFormatterOr<T extends string[]>(list: T): string {
-  return new Intl.ListFormat('en-gb', {
-    style: 'long',
-    type: 'disjunction',
-  }).format(list);
-}
+const formatListWithOr = formatList('or');
 
 export const units = ['sqm', 'sqft'] as const satisfies readonly string[];
 export type Unit = (typeof units)[number];
@@ -21,7 +17,7 @@ const searchFormSchema = z
     unit: z.enum(units, {
       // https://github.com/colinhacks/zod/issues/580#issuecomment-1425044684
       errorMap: () => ({
-        message: `Unit must be ${listFormatterOr([...units])}`,
+        message: `Unit must be ${formatListWithOr([...units])}`,
       }),
     }),
   })
