@@ -5,3 +5,11 @@ export const wrapper = style({
   color: 'var(--background-rgb)',
   padding: '2rem',
 });
+
+export const body = style({
+  margin: '2rem 0',
+});
+
+export const backLink = style({
+  display: 'block',
+});

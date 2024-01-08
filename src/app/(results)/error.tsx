@@ -12,10 +12,12 @@ export default function Error({ error }: ErrorPageProps) {
   return (
     <div className={styles.wrapper}>
       <h2>Error</h2>
-      <div>
+      <div className={styles.body}>
         <code>{error.message}</code>
       </div>
-      <Link href="/">Back</Link>
+      <Link className={styles.backLink} href="/">
+        Back
+      </Link>
     </div>
   );
 }

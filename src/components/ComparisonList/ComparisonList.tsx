@@ -3,7 +3,7 @@ import type { ReactElement } from 'react';
 import * as styles from './ComparisonList.css';
 
 export type ComparisonListProps = {
-  amount: string;
+  amount: number;
   amountCalculatedInDecimals: number;
   unit: string;
 };
