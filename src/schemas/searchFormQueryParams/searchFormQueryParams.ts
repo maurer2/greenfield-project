@@ -9,7 +9,7 @@ const searchFormQueryParamsSchema = z
     amount: z
       .string()
       .min(1)
-      .nullable()
+      .optional()
       .pipe(
         z.coerce
           .number({
@@ -18,7 +18,7 @@ const searchFormQueryParamsSchema = z
           })
           .positive('Amount must be at least +1'),
       ),
-    unit: z.string().min(3).nullable().pipe(z.enum(units.units)),
+    unit: z.string().min(3).optional().pipe(z.enum(units.units)),
   })
   .strict();
 
