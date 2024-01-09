@@ -17,7 +17,7 @@ const searchFormSchema = z
     unit: z.enum(units, {
       // https://github.com/colinhacks/zod/issues/580#issuecomment-1425044684
       errorMap: () => ({
-        message: `Unit must be ${formatListWithOr([...units])}`,
+        message: `Unit must be ${formatListWithOr(units)}`,
       }),
     }),
   })
