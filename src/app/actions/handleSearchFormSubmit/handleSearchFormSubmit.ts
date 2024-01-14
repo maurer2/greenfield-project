@@ -4,6 +4,7 @@ import type { SearchFormErrors, SearchFormSchema } from '@/schemas/searchForm/se
 import type { ErrorObject } from 'serialize-error';
 
 import searchFormSchema from '@/schemas/searchForm/searchForm';
+import { isRedirectError } from 'next/dist/client/components/redirect';
 import { redirect } from 'next/navigation';
 import { setTimeout } from 'node:timers/promises';
 import { serializeError } from 'serialize-error';
@@ -56,11 +57,10 @@ export async function handleSearchFormSubmit(
       return { errors: searchFormErrors, status: 'validation-fail' };
     }
 
-    if (error instanceof Error) {
-      // https://github.com/vercel/next.js/issues/55586#issuecomment-1869419142
-      if (error?.message === 'NEXT_REDIRECT') {
-        throw error;
-      }
+    // workaround to allow redirect inside a try catch
+    // https://github.com/vercel/next.js/issues/55586#issuecomment-1877338010
+    if (isRedirectError(error)) {
+      throw error;
     }
 
     return { error: serializeError(new Error('Unknown error.')), status: 'error' };
