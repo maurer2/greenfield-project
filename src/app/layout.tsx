@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import type { PropsWithChildren } from 'react';
 
 import Background from '@/components/Background/Background';
+import 'modern-normalize/modern-normalize.css';
 
 import './globals.css';
 import * as styles from './layout.css';
