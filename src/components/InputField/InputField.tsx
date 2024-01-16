@@ -11,33 +11,43 @@ export type InputFieldProps = {
   value: string;
 };
 
+type InputStyleVariant = keyof typeof styles.input;
+
 function InputField({
-  errors,
+  errors = [],
   label,
   name,
   onBlur,
   onChange,
   value,
 }: InputFieldProps): ReactElement {
+  const errorId = `${name}-error`;
+  const hasErrors = errors?.length > 0;
+
+  const currentInputState: InputStyleVariant = hasErrors ? 'invalid' : 'default';
+
   return (
     <div className={styles.fieldWrapper}>
       <label className={styles.label} htmlFor={name}>
         {label}
       </label>
       <input
-        className={styles.input}
+        aria-describedby={hasErrors ? errorId : undefined}
+        aria-invalid={hasErrors}
+        className={styles.input[currentInputState]}
         id={name}
         name={name}
         onBlur={onBlur}
         onChange={onChange}
         placeholder={`Enter ${label}`}
+        required
         type="text"
         value={value}
       />
-      {errors && errors?.length > 0 && (
-        <div className={styles.errors}>
-          {errors.map((error) => (
-            <p key={error}>{error}</p>
+      {hasErrors && (
+        <div className={styles.errors} id={errorId}>
+          {errors.map((currentError) => (
+            <p key={currentError}>{currentError}</p>
           ))}
         </div>
       )}

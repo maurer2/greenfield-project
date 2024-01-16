@@ -13,8 +13,10 @@ export type SelectBoxProps = {
   value: Unit;
 };
 
+type SelectStyleVariant = keyof typeof styles.select;
+
 function SelectBox({
-  errors,
+  errors = [],
   label,
   name,
   onBlur,
@@ -22,17 +24,25 @@ function SelectBox({
   options,
   value,
 }: SelectBoxProps): ReactElement {
+  const errorId = `${name}-error`;
+  const hasErrors = errors?.length > 0;
+
+  const currentSelectState: SelectStyleVariant = hasErrors ? 'invalid' : 'default';
+
   return (
     <div className={styles.fieldWrapper}>
       <label className={styles.label} htmlFor={name}>
         {label}
       </label>
       <select
-        className={styles.select}
+        aria-describedby={hasErrors ? errorId : undefined}
+        aria-invalid={hasErrors}
+        className={styles.select[currentSelectState]}
         id={name}
         name={name}
         onBlur={onBlur}
         onChange={onChange}
+        required
         value={value}
       >
         {options.map((option) => (
@@ -41,8 +51,8 @@ function SelectBox({
           </option>
         ))}
       </select>
-      {errors && errors?.length > 0 && (
-        <div className={styles.errors}>
+      {hasErrors && (
+        <div className={styles.errors} id={errorId}>
           {errors.map((error) => (
             <p key={error}>{error}</p>
           ))}

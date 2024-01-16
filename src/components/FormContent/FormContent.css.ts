@@ -16,6 +16,10 @@ export const wrapper = style({
       gridTemplateRows: 'max-content 1fr auto',
     },
   },
+  // eslint-disable-next-line perfectionist/sort-objects
+  '&:has([aria-invalid="true"])': {
+    border: '2px solid var(--error-rgb)',
+  },
 });
 
 export const output = style({

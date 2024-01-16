@@ -1,4 +1,4 @@
-import { style } from '@vanilla-extract/css';
+import { style, styleVariants } from '@vanilla-extract/css';
 
 export const fieldWrapper = style({
   display: 'contents',
@@ -13,7 +13,7 @@ export const label = style({
   },
 });
 
-export const select = style({
+const selectBase = style({
   fontSize: '1rem',
   padding: '0.5rem',
 
@@ -24,6 +24,17 @@ export const select = style({
       gridRowStart: 2,
     },
   },
+});
+
+export const select = styleVariants({
+  default: [selectBase, { background: 'var(--foreground-rgb)' }],
+  invalid: [
+    selectBase,
+    {
+      background: 'var(--error-rgb)',
+      color: 'var(--foreground-rgb)',
+    },
+  ],
 });
 
 export const errors = style({
