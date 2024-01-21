@@ -1,7 +1,5 @@
 'use client';
 
-import Link from 'next/link';
-
 import * as styles from './error.css';
 
 type ErrorPageProps = {

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import * as styles from './error.css';
 
 type ErrorPageProps = {
-  error: Error & { digest?: string };
+  error?: Error & { digest?: string };
 };
 
 export default function Error({ error }: ErrorPageProps) {
@@ -13,7 +13,7 @@ export default function Error({ error }: ErrorPageProps) {
     <div className={styles.wrapper}>
       <h2>Error</h2>
       <div className={styles.body}>
-        <code>{error.message}</code>
+        <code>{error?.message ?? 'Unknown error'}</code>
       </div>
       <Link className={styles.backLink} href="/">
         Back

@@ -1,53 +1,34 @@
-import type {
-  SearchFormQueryParamsRawSchema,
-  SearchFormQueryParamsSchema,
-} from '@/schemas/searchFormQueryParams/searchFormQueryParams';
+import type { SearchFormQueryParamsRawSchema } from '@/schemas/searchFormQueryParams/searchFormQueryParams';
 
-import ComparisonList from '@/components/ComparisonList/ComparisonList';
+import ComparisonBox from '@/components/ComparisonBox/ComparisonBox';
 import searchFormQueryParamsSchema from '@/schemas/searchFormQueryParams/searchFormQueryParams';
 import Link from 'next/link';
 
-import * as styles from './page.css';
-
-export const conversionFactorFeetToMetre = 10.764;
-export const areaFootballPitch = 105 * 68; // 7_140
+import * as styles from './error.css';
 
 type PageProps = {
-  searchParams: SearchFormQueryParamsRawSchema;
+  searchParams?: SearchFormQueryParamsRawSchema;
 };
 
 export default async function Results({ searchParams }: PageProps) {
-  let searchParamsClean: SearchFormQueryParamsSchema | null = null;
+  const searchParamsClean = searchFormQueryParamsSchema.safeParse(searchParams);
 
-  try {
-    searchParamsClean = searchFormQueryParamsSchema.parse(searchParams);
-  } catch (error) {
-    // triggers nearest error.tsx
-    throw new Error('Missing or invalid query params.', {
-      cause: error,
-    });
+  // workaround
+  if (!searchParamsClean.success) {
+    return (
+      <div className={styles.wrapper}>
+        <h2>Missing or invalid query params.</h2>
+        <div className={styles.body}>
+          <code className={styles.code}>{JSON.stringify(searchParamsClean.error, null, 4)}</code>
+        </div>
+        <Link className={styles.backLink} href="/">
+          Back
+        </Link>
+      </div>
+    );
   }
 
-  const { amount, unit } = searchParamsClean;
+  const { amount, unit } = searchParamsClean.data;
 
-  const amountInMetric = unit === 'sqm' ? amount : amount / conversionFactorFeetToMetre;
-
-  const amountCalculatedInPercent = (amountInMetric * 100) / areaFootballPitch;
-  const amountCalculatedInDecimals = amountCalculatedInPercent / 100;
-
-  return (
-    <div className={styles.wrapper}>
-      <h2>Calculated Results</h2>
-
-      <ComparisonList
-        amount={amount}
-        amountCalculatedInDecimals={amountCalculatedInDecimals}
-        unit={unit}
-      />
-
-      <Link className={styles.backLink} href="/">
-        Back
-      </Link>
-    </div>
-  );
+  return <ComparisonBox amount={amount} unit={unit} />;
 }
