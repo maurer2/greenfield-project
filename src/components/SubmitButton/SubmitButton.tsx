@@ -3,17 +3,25 @@ import type { FormEvent, MouseEvent, PropsWithChildren, ReactElement } from 'rea
 import * as styles from './SubmitButton.css';
 
 export type SubmitButtonProps = {
-  isDisabled: boolean;
+  isDisabled?: boolean;
   onBlur?: (event: FormEvent<HTMLButtonElement>) => void;
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
 };
 
 function SubmitButton({
   children,
-  isDisabled,
+  isDisabled = false,
+  onBlur,
+  onClick,
 }: PropsWithChildren<SubmitButtonProps>): ReactElement {
   return (
-    <button className={styles.submitButton} disabled={isDisabled} type="submit">
+    <button
+      className={styles.submitButton}
+      disabled={isDisabled}
+      onBlur={onBlur}
+      onClick={onClick}
+      type="submit"
+    >
       {children}
     </button>
   );

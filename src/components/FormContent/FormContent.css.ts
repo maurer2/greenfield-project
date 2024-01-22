@@ -17,10 +17,10 @@ export const wrapper = style({
     },
   },
   // eslint-disable-next-line
-  // @ts-ignore
-  // eslint-disable-next-line
-  '&:has([aria-invalid="true"])': {
-    border: '2px solid var(--error-rgb)',
+  selectors: {
+    '&:has([aria-invalid="true"])': {
+      border: '2px solid var(--error-rgb)',
+    },
   },
 });
 
