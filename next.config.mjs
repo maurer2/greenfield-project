@@ -1,17 +1,19 @@
-import {createVanillaExtractPlugin} from "@vanilla-extract/next-plugin";
+import { createVanillaExtractPlugin } from '@vanilla-extract/next-plugin';
 
 const withVanillaExtract = createVanillaExtractPlugin({
-  identifiers: 'debug'
+  identifiers: 'debug',
 });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  webpack: (config) => {
+  webpack: (config, { dev }) => {
     config.module.rules.push({
       test: /\.svg$/i,
       use: ['@svgr/webpack'],
     });
+    console.log(`isDev-mode: ${dev}`);
+
     return config;
   },
 };

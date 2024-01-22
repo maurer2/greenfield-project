@@ -13,7 +13,7 @@ type ComparisonBoxProps = {
 const conversionFactorFeetToMetre = 10.764;
 const areaFootballPitch = 7_140;
 
-export default async function ComparisonBox({ amount, unit }: ComparisonBoxProps) {
+export default function ComparisonBox({ amount, unit }: ComparisonBoxProps) {
   const amountInMetric = unit === 'sqm' ? amount : amount / conversionFactorFeetToMetre;
 
   const amountCalculatedInPercent = (amountInMetric * 100) / areaFootballPitch;

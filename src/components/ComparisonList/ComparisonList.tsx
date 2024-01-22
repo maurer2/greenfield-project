@@ -1,3 +1,4 @@
+import type { SearchFormSchema } from '@/types';
 import type { ReactElement } from 'react';
 
 import * as styles from './ComparisonList.css';
@@ -5,7 +6,7 @@ import * as styles from './ComparisonList.css';
 export type ComparisonListProps = {
   amount: number;
   amountCalculatedInDecimals: number;
-  unit: string;
+  unit: SearchFormSchema['unit'];
 };
 
 function ComparisonList({

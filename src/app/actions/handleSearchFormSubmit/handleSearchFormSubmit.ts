@@ -6,7 +6,7 @@ import type { ErrorObject } from 'serialize-error';
 import searchFormSchema from '@/schemas/searchForm/searchForm';
 import { isRedirectError } from 'next/dist/client/components/redirect';
 import { redirect } from 'next/navigation';
-import { setTimeout } from 'node:timers/promises';
+// import { setTimeout } from 'node:timers/promises';
 import { serializeError } from 'serialize-error';
 import { ZodError } from 'zod';
 
@@ -25,7 +25,7 @@ export async function handleSearchFormSubmit(
   prevSearchFormSubmitActionResult: SearchFormSubmitActionResult,
   formData: FormData,
 ): Promise<SearchFormSubmitActionResult> {
-  await setTimeout(1500);
+  // await setTimeout(1500);
 
   const amount = formData.get('amount');
   const unit = formData.get('unit');

@@ -1,4 +1,7 @@
 import { defineConfig, devices } from '@playwright/experimental-ct-react';
+import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
+import react from '@vitejs/plugin-react';
+import { resolve } from 'path';
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -38,8 +41,21 @@ export default defineConfig({
     /* Port to use for Playwright component endpoint. */
     ctPort: 3100,
 
+    ctViteConfig: {
+      // vite version mismatch between vanillaExtractPlugin's vite 4.x and react() 5.0.12. Override to 5.0.12 breaks vanillaExtractPlugin
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      plugins: [react() as any, vanillaExtractPlugin()],
+      resolve: {
+        alias: {
+          '@': resolve(__dirname, './src'),
+        },
+      },
+    },
+    locale: 'en-GB',
+    timezoneId: 'Europe/London',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+    viewport: { height: 720, width: 1280 },
   },
 
   /* Opt out of parallel tests on CI. */

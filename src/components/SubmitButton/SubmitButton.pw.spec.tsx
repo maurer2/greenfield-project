@@ -4,9 +4,9 @@ import SubmitButton from './SubmitButton';
 
 test.describe('SubmitButton', () => {
   test('renders', async ({ mount }) => {
-    const component = await mount(<SubmitButton>ButtonText</SubmitButton>);
+    const component = await mount(<SubmitButton>Button text</SubmitButton>);
 
-    await expect(component.getByRole('button')).not.toBeEmpty();
-    await expect(component.getByRole('button')).toContainText('ButtonText');
+    await expect(component).not.toBeEmpty();
+    await expect(component).toContainText('Button text');
   });
 });
