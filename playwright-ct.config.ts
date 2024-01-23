@@ -2,6 +2,7 @@ import { defineConfig, devices } from '@playwright/experimental-ct-react';
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
 import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
+import svgr from 'vite-plugin-svgr';
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -42,9 +43,9 @@ export default defineConfig({
     ctPort: 3100,
 
     ctViteConfig: {
-      // vite version mismatch between vanillaExtractPlugin's vite 4.x and react() 5.0.12. Override to 5.0.12 breaks vanillaExtractPlugin
+      // vite version mismatch of "Plugin"-type between vanillaExtractPlugin's vite 4.x and react 5.0.12. Override to 5.0.12 breaks vanillaExtractPlugin
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      plugins: [react() as any, vanillaExtractPlugin()],
+      plugins: [react() as any, svgr(), vanillaExtractPlugin()],
       resolve: {
         alias: {
           '@': resolve(__dirname, './src'),

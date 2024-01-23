@@ -7,12 +7,20 @@ const withVanillaExtract = createVanillaExtractPlugin({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  webpack: (config, { dev }) => {
+  webpack: (config) => {
+    // adds support for ?react that is required in vite for vite-plugin-svgr
     config.module.rules.push({
       test: /\.svg$/i,
-      use: ['@svgr/webpack'],
+      oneOf: [
+        {
+          resourceQuery: /react/,
+          use: ['@svgr/webpack'],
+        },
+        {
+          use: ['@svgr/webpack'],
+        },
+      ],
     });
-    console.log(`isDev-mode: ${dev}`);
 
     return config;
   },
