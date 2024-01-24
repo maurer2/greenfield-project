@@ -45,7 +45,7 @@ function InputField({
         value={value}
       />
       {hasErrors && (
-        <div className={styles.errors} id={errorId}>
+        <div className={styles.errors} data-testid="input-errors" id={errorId}>
           {errors.map((currentError) => (
             <p key={currentError}>{currentError}</p>
           ))}

@@ -24,9 +24,9 @@ function SelectBox({
   options,
   value,
 }: SelectBoxProps): ReactElement {
-  const errorId = `${name}-error`;
   const hasErrors = errors?.length > 0;
 
+  const errorId = `${name}-error`;
   const currentSelectState: SelectStyleVariant = hasErrors ? 'invalid' : 'default';
 
   return (
@@ -52,7 +52,7 @@ function SelectBox({
         ))}
       </select>
       {hasErrors && (
-        <div className={styles.errors} id={errorId}>
+        <div className={styles.errors} data-testid="select-errors" id={errorId}>
           {errors.map((error) => (
             <p key={error}>{error}</p>
           ))}
