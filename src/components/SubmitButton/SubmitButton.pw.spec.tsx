@@ -1,15 +1,19 @@
 import { expect, test } from '@playwright/experimental-ct-react';
-import { spy } from 'tinyspy';
+import { mock } from 'node:test';
 
 import SubmitButton from './SubmitButton';
 
+const mocks = {
+  onBlur: () => {},
+  onClick: () => {},
+};
+
 test.describe('SubmitButton', () => {
-  const onClickSpy = spy();
-  const onBlurSpy = spy();
+  const onClickSpy = mock.method(mocks, 'onClick', async () => {});
+  const onBlurSpy = mock.method(mocks, 'onBlur', async () => {});
 
   test.beforeEach(async () => {
-    onClickSpy.reset();
-    onBlurSpy.reset();
+    mock.reset();
   });
 
   test('renders', async ({ mount }) => {
@@ -30,7 +34,7 @@ test.describe('SubmitButton', () => {
 
     await component.click();
 
-    expect(onClickSpy.called).toBeTruthy();
+    expect(onClickSpy.mock.callCount()).toBeTruthy();
   });
 
   test('triggers onBlur callback function on blur', async ({ mount }) => {
@@ -39,6 +43,6 @@ test.describe('SubmitButton', () => {
     await component.focus();
     await component.blur();
 
-    expect(onBlurSpy.called).toBeTruthy();
+    expect(onBlurSpy.mock.callCount()).toBeTruthy();
   });
 });

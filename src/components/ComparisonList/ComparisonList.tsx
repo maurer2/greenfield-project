@@ -21,13 +21,15 @@ function ComparisonList({
 
   return (
     <dl className={styles.wrapper}>
-      <dt>Amount:</dt>
+      <dt role="listitem">Amount:</dt>
+
       <dd>{amount}</dd>
       <dd>{amountCalculatedInDecimalsFormatted}</dd>
 
-      <dt>Unit:</dt>
+      <dt role="listitem">Unit:</dt>
+
       <dd>{unit}</dd>
-      <dt>Football pitch</dt>
+      <dd>Football pitch</dd>
     </dl>
   );
 }

@@ -1,17 +1,21 @@
 import type { ComponentPropsWithoutRef } from 'react';
 
 import { expect, test } from '@playwright/experimental-ct-react';
-import { spy } from 'tinyspy';
+import { mock } from 'node:test';
 
 import SelectBox from './SelectBox';
 
+const mocks = {
+  onBlur: () => {},
+  onChange: () => {},
+};
+
 test.describe('SelectBox', () => {
-  const onChangeSpy = spy();
-  const onBlurSpy = spy();
+  const onChangeSpy = mock.method(mocks, 'onChange', async () => {});
+  const onBlurSpy = mock.method(mocks, 'onBlur', async () => {});
 
   test.beforeEach(async () => {
-    onChangeSpy.reset();
-    onBlurSpy.reset();
+    mock.reset();
   });
 
   const propsDefault: ComponentPropsWithoutRef<typeof SelectBox> = {
@@ -40,7 +44,7 @@ test.describe('SelectBox', () => {
 
     await component.getByRole('combobox').selectOption('sqft');
 
-    expect(onChangeSpy.called).toBeTruthy();
+    expect(onChangeSpy.mock.callCount()).toBeTruthy();
   });
 
   test('triggers onBlur callback function on blur', async ({ mount }) => {
@@ -49,7 +53,7 @@ test.describe('SelectBox', () => {
     await component.getByRole('combobox').focus();
     await component.getByRole('combobox').blur();
 
-    expect(onBlurSpy.called).toBeTruthy();
+    expect(onBlurSpy.mock.callCount()).toBeTruthy();
   });
 
   test('adds error attributes to select', async ({ mount }) => {

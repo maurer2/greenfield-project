@@ -1,17 +1,21 @@
 import type { ComponentPropsWithoutRef } from 'react';
 
 import { expect, test } from '@playwright/experimental-ct-react';
-import { spy } from 'tinyspy';
+import { mock } from 'node:test';
 
 import InputField from './InputField';
 
+const mocks = {
+  onBlur: () => {},
+  onChange: () => {},
+};
+
 test.describe('InputField', () => {
-  const onChangeSpy = spy();
-  const onBlurSpy = spy();
+  const onChangeSpy = mock.method(mocks, 'onChange', async () => {});
+  const onBlurSpy = mock.method(mocks, 'onBlur', async () => {});
 
   test.beforeEach(async () => {
-    onChangeSpy.reset();
-    onBlurSpy.reset();
+    mock.reset();
   });
 
   const propsDefault: ComponentPropsWithoutRef<typeof InputField> = {
@@ -40,7 +44,7 @@ test.describe('InputField', () => {
     // await component.getByRole('textbox').clear();
     await component.getByRole('textbox').fill('5000');
 
-    expect(onChangeSpy.called).toBeTruthy();
+    expect(onChangeSpy.mock.callCount()).toBeTruthy();
   });
 
   test('triggers onBlur callback function on blur', async ({ mount }) => {
@@ -49,7 +53,7 @@ test.describe('InputField', () => {
     await component.getByRole('textbox').focus();
     await component.getByRole('textbox').blur();
 
-    expect(onBlurSpy.called).toBeTruthy();
+    expect(onBlurSpy.mock.callCount()).toBeTruthy();
   });
 
   test('adds error attributes to input', async ({ mount }) => {
