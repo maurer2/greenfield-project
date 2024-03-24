@@ -1,5 +1,7 @@
-import type { Unit } from '@/schemas/searchForm/searchForm';
+import type { SearchFormSchema, Unit } from '@/schemas/searchForm/searchForm';
 import type { FormEvent, ReactElement } from 'react';
+
+import { useFormContext } from 'react-hook-form';
 
 import * as styles from './SelectBox.css';
 
@@ -24,6 +26,8 @@ function SelectBox({
   options,
   value,
 }: SelectBoxProps): ReactElement {
+  const { register } = useFormContext<SearchFormSchema>();
+
   const hasErrors = errors?.length > 0;
 
   const errorId = `${name}-error`;
@@ -39,11 +43,12 @@ function SelectBox({
         aria-invalid={hasErrors}
         className={styles.select[currentSelectState]}
         id={name}
-        name={name}
-        onBlur={onBlur}
-        onChange={onChange}
+        // name={name}
+        // onBlur={onBlur}
+        // onChange={onChange}
         required
-        value={value}
+        // value={value}
+        {...register('unit')}
       >
         {options.map((option) => (
           <option key={option} value={option}>

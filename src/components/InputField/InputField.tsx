@@ -1,4 +1,7 @@
+import type { SearchFormSchema } from '@/schemas/searchForm/searchForm';
 import type { FormEvent, ReactElement } from 'react';
+
+import { useFormContext } from 'react-hook-form';
 
 import * as styles from './inputField.css';
 
@@ -21,6 +24,8 @@ function InputField({
   onChange,
   value,
 }: InputFieldProps): ReactElement {
+  const { register } = useFormContext<SearchFormSchema>();
+
   const errorId = `${name}-error`;
   const hasErrors = errors?.length > 0;
 
@@ -36,13 +41,14 @@ function InputField({
         aria-invalid={hasErrors}
         className={styles.input[currentInputState]}
         id={name}
-        name={name}
-        onBlur={onBlur}
-        onChange={onChange}
+        // name={name}
+        // onBlur={onBlur}
+        // onChange={onChange}
         placeholder={`Enter ${label}`}
         required
         type="text"
-        value={value}
+        // value={value}
+        {...register('amount')}
       />
       {hasErrors && (
         <div className={styles.errors} data-testid="input-errors" id={errorId}>
