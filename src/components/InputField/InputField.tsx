@@ -41,7 +41,7 @@ function InputField({
         onChange={onChange}
         placeholder={`Enter ${label}`}
         required
-        type="text"
+        type="number"
         value={value}
       />
       {hasErrors && (
