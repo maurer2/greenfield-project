@@ -89,7 +89,7 @@
         "wmaurer.change-case",
         "yatki.vscode-surround",
         // "Orta.vscode-jest", // jest
-        "ZixuanChen.vitest-explorer", // vitest
+        "vitest.explorer", // vitest
         "yoavbls.pretty-ts-errors",
         "mikestead.dotenv"
       ]
