@@ -12,7 +12,7 @@ export const wrapper = style({
   '@media': {
     'screen and (min-width: 480px)': {
       borderWidth: '4px',
-      gridTemplateColumns: '7rem 7rem max-content',
+      gridTemplateColumns: '7.5rem 7rem max-content',
       gridTemplateRows: 'max-content 1fr auto',
     },
   },

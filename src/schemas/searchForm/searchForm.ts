@@ -8,12 +8,20 @@ export type Unit = (typeof units)[number];
 
 const searchFormSchema = z
   .object({
-    amount: z.coerce
-      .number({
-        invalid_type_error: 'Amount must be number-like',
-        required_error: 'Amount is required',
-      })
-      .positive('Amount must be at least +1'),
+    amount: z
+      .number()
+      // .or(z.literal(''))
+      .or(z.string())
+      .pipe(
+        z
+          .number({
+            coerce: true, // https://github.com/colinhacks/zod/discussions/330#discussioncomment-8895651
+            invalid_type_error: 'Amount must be number-like',
+            required_error: 'Amount is required',
+          })
+          .positive('Amount must be at least +1'),
+      ),
+
     unit: z.enum(units, {
       // https://github.com/colinhacks/zod/issues/580#issuecomment-1425044684
       errorMap: () => ({
@@ -25,5 +33,6 @@ const searchFormSchema = z
 
 export default searchFormSchema;
 
-export type SearchFormSchema = z.infer<typeof searchFormSchema>;
+export type SearchFormValues = z.input<typeof searchFormSchema>;
+export type SearchFormSchema = z.output<typeof searchFormSchema>;
 export type SearchFormErrors = z.inferFlattenedErrors<typeof searchFormSchema>;
