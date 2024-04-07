@@ -39,7 +39,7 @@ function FormWrapper({ children }: FormWrapperProps): ReactElement {
   return (
     <FormProvider {...methods}>
       <Form
-        action={action} // 404
+        action="api/calculate-football-pitch-size"
         className={styles.formWrapper}
         control={methods.control}
         // @ts-expect-error union type mismatch
@@ -50,8 +50,8 @@ function FormWrapper({ children }: FormWrapperProps): ReactElement {
         onSubmit={({ data, formData, formDataJson }) => {
           // console.log(data, formData, formDataJson);
         }}
-        onSuccess={(err) => {
-          console.log('onSuccess');
+        onSuccess={({ response }) => {
+          console.log('onSuccess', response);
         }}
       >
         {children({ formState })}
