@@ -33,7 +33,9 @@ function InputField<T extends keyof SearchFormValues>({
         {label}
       </label>
       <input
-        {...register('amount')}
+        {...register('amount', {
+          valueAsNumber: true,
+        })}
         aria-describedby={hasError ? errorId : undefined}
         aria-invalid={hasError ? 'true' : 'false'}
         className={styles.input[currentInputState]}

@@ -1,7 +1,7 @@
 'use client';
 
 import type { FormContentProps } from '@/components/FormContent/FormContent';
-import type { SearchFormSchema, SearchFormValues } from '@/schemas/searchForm/searchForm';
+import type { SearchFormValues } from '@/schemas/searchForm/searchForm';
 import type { ElementType, ReactElement } from 'react';
 
 import { handleSearchFormSubmit } from '@/app/actions/handleSearchFormSubmit/handleSearchFormSubmit';
@@ -34,17 +34,25 @@ function FormWrapper({ children }: FormWrapperProps): ReactElement {
     // errors: todo
   });
 
+  console.log(formState);
+
   return (
     <FormProvider {...methods}>
       <Form
-        action={action}
+        action={action} // 404
         className={styles.formWrapper}
         control={methods.control}
         // @ts-expect-error union type mismatch
         method="POST"
-        // onError={() => {}}
-        // onSubmit={() => {}}
-        // onSuccess={() => {}}
+        onError={(response) => {
+          console.log('onError', response);
+        }}
+        onSubmit={({ data, formData, formDataJson }) => {
+          // console.log(data, formData, formDataJson);
+        }}
+        onSuccess={(err) => {
+          console.log('onSuccess');
+        }}
       >
         {children({ formState })}
       </Form>
