@@ -1,37 +1,34 @@
-import type { SearchFormSchema, Unit } from '@/schemas/searchForm/searchForm';
-import type { FormEvent, ReactElement } from 'react';
+import type { SearchFormValues } from '@/schemas/searchForm/searchForm';
+import type { ReactElement } from 'react';
 
 import { useFormContext } from 'react-hook-form';
 
 import * as styles from './SelectBox.css';
 
-export type SelectBoxProps = {
-  errors?: string[];
+export type SelectBoxProps<T> = {
   label: string;
-  name: string;
-  onBlur?: (event: FormEvent<HTMLSelectElement>) => void;
-  onChange: (event: FormEvent<HTMLSelectElement>) => void;
-  options: Unit[];
-  value: Unit;
+  name: T;
+  // options: Unit[];
+  options: string[];
 };
 
 type SelectStyleVariant = keyof typeof styles.select;
 
-function SelectBox({
-  errors = [],
+function SelectBox<T extends keyof SearchFormValues>({
   label,
   name,
-  onBlur,
-  onChange,
   options,
-  value,
-}: SelectBoxProps): ReactElement {
-  const { register } = useFormContext<SearchFormSchema>();
+}: SelectBoxProps<T>): ReactElement {
+  const {
+    formState: { errors },
+    register,
+  } = useFormContext<SearchFormValues>();
 
-  const hasErrors = errors?.length > 0;
-
+  const error = errors[name]?.message;
   const errorId = `${name}-error`;
-  const currentSelectState: SelectStyleVariant = hasErrors ? 'invalid' : 'default';
+
+  const hasError = !!error;
+  const currentSelectState: SelectStyleVariant = hasError ? 'invalid' : 'default';
 
   return (
     <div className={styles.fieldWrapper}>
@@ -39,16 +36,11 @@ function SelectBox({
         {label}
       </label>
       <select
-        aria-describedby={hasErrors ? errorId : undefined}
-        aria-invalid={hasErrors}
-        className={styles.select[currentSelectState]}
-        id={name}
-        // name={name}
-        // onBlur={onBlur}
-        // onChange={onChange}
-        required
-        // value={value}
         {...register('unit')}
+        aria-describedby={hasError ? errorId : undefined}
+        aria-invalid={hasError ? 'true' : 'false'}
+        className={styles.select[currentSelectState]}
+        required
       >
         {options.map((option) => (
           <option key={option} value={option}>
@@ -56,11 +48,9 @@ function SelectBox({
           </option>
         ))}
       </select>
-      {hasErrors && (
-        <div className={styles.errors} data-testid="select-errors" id={errorId}>
-          {errors.map((error) => (
-            <p key={error}>{error}</p>
-          ))}
+      {hasError && (
+        <div className={styles.errors} data-testid="select-error" id={errorId}>
+          <p>{error}</p>
         </div>
       )}
     </div>

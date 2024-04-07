@@ -1,35 +1,31 @@
-import type { SearchFormSchema } from '@/schemas/searchForm/searchForm';
-import type { FormEvent, ReactElement } from 'react';
+import type { SearchFormValues } from '@/schemas/searchForm/searchForm';
+import type { ReactElement } from 'react';
 
 import { useFormContext } from 'react-hook-form';
 
 import * as styles from './inputField.css';
 
-export type InputFieldProps = {
-  errors?: string[];
+export type InputFieldProps<T> = {
   label: string;
-  name: string;
-  onBlur?: (event: FormEvent<HTMLInputElement>) => void;
-  onChange: (event: FormEvent<HTMLInputElement>) => void;
-  value: string;
+  name: T;
 };
 
 type InputStyleVariant = keyof typeof styles.input;
 
-function InputField({
-  errors = [],
+function InputField<T extends keyof SearchFormValues>({
   label,
   name,
-  onBlur,
-  onChange,
-  value,
-}: InputFieldProps): ReactElement {
-  const { register } = useFormContext<SearchFormSchema>();
+}: InputFieldProps<T>): ReactElement {
+  const {
+    formState: { errors },
+    register,
+  } = useFormContext<SearchFormValues>();
 
+  const error = errors[name]?.message;
   const errorId = `${name}-error`;
-  const hasErrors = errors?.length > 0;
 
-  const currentInputState: InputStyleVariant = hasErrors ? 'invalid' : 'default';
+  const hasError = !!error;
+  const currentInputState: InputStyleVariant = hasError ? 'invalid' : 'default';
 
   return (
     <div className={styles.fieldWrapper}>
@@ -37,24 +33,17 @@ function InputField({
         {label}
       </label>
       <input
-        aria-describedby={hasErrors ? errorId : undefined}
-        aria-invalid={hasErrors}
+        {...register('amount')}
+        aria-describedby={hasError ? errorId : undefined}
+        aria-invalid={hasError ? 'true' : 'false'}
         className={styles.input[currentInputState]}
-        id={name}
-        // name={name}
-        // onBlur={onBlur}
-        // onChange={onChange}
         placeholder={`Enter ${label}`}
         required
         type="number"
-        // value={value}
-        {...register('amount')}
       />
-      {hasErrors && (
-        <div className={styles.errors} data-testid="input-errors" id={errorId}>
-          {errors.map((currentError) => (
-            <p key={currentError}>{currentError}</p>
-          ))}
+      {hasError && (
+        <div className={styles.errors} data-testid="input-error" id={errorId}>
+          <p>{error}</p>
         </div>
       )}
     </div>

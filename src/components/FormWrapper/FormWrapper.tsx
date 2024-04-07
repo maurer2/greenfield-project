@@ -31,6 +31,7 @@ function FormWrapper({ children }: FormWrapperProps): ReactElement {
       unit: 'sqm',
     },
     progressive: true, // adds necessary hidden fields for form action
+    // errors: todo
   });
 
   return (
