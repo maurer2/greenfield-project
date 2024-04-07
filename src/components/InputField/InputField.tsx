@@ -42,7 +42,8 @@ function InputField({
         placeholder={`Enter ${label}`}
         required
         type="number"
-        value={value}
+        // value={value}
+        {...register('amount')}
       />
       {hasErrors && (
         <div className={styles.errors} data-testid="input-errors" id={errorId}>
