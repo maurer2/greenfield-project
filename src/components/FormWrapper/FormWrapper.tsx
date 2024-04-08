@@ -6,6 +6,7 @@ import type { ElementType, ReactElement } from 'react';
 
 import { handleSearchFormSubmit } from '@/app/actions/handleSearchFormSubmit/handleSearchFormSubmit';
 import dynamic from 'next/dynamic';
+import { redirect, useRouter } from 'next/navigation';
 import { useFormState } from 'react-dom';
 import { Form, FormProvider, useForm } from 'react-hook-form';
 
@@ -24,6 +25,7 @@ type FormWrapperProps = {
 
 // wrapper required to be able to use useFormStatus in child
 function FormWrapper({ children }: FormWrapperProps): ReactElement {
+  const { push } = useRouter();
   const [formState, action] = useFormState(handleSearchFormSubmit, null);
   const methods = useForm<SearchFormValues>({
     defaultValues: {
@@ -47,11 +49,25 @@ function FormWrapper({ children }: FormWrapperProps): ReactElement {
         onError={(response) => {
           console.log('onError', response);
         }}
-        onSubmit={({ data, formData, formDataJson }) => {
-          // console.log(data, formData, formDataJson);
-        }}
-        onSuccess={({ response }) => {
-          console.log('onSuccess', response);
+        // onSubmit={({ data, formData, formDataJson }) => {
+        //   // console.log(data, formData, formDataJson);
+        // }}
+        onSuccess={async ({ response }) => {
+          if (response.ok) {
+            const data = await response.json();
+
+            if ('queryParams' in data) {
+              const queryParams = new URLSearchParams({
+                amount: data?.queryParams.amount,
+                unit: data?.queryParams.unit,
+              });
+
+              console.log(`/calculated-results?${queryParams.toString()}`);
+
+              push(`/calculated-results?${queryParams.toString()}`);
+              // redirect(`/calculated-results?${queryParams.toString()}`);
+            }
+          }
         }}
       >
         {children({ formState })}
