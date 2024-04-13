@@ -18,9 +18,10 @@ import * as styles from './FormContent.css';
 
 export type FormContentProps = {
   formState: SearchFormSubmitActionResult;
+  isSubmitting: boolean;
 };
 
-function FormContent({ formState }: FormContentProps): ReactElement {
+function FormContent({ formState, isSubmitting }: FormContentProps): ReactElement {
   const methods = useFormContext<SearchFormValues>();
   const { pending } = useFormStatus();
   const {
@@ -35,7 +36,7 @@ function FormContent({ formState }: FormContentProps): ReactElement {
   return (
     <div
       className={clsx(styles.wrapper, {
-        'animate__animated animate__infinite animate__pulse': pending,
+        'animate__animated animate__infinite animate__pulse': pending || isSubmitting,
       })}
     >
       <InputField label="Amount" name="amount" />

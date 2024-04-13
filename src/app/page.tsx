@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <FormWrapper>
       {/* eslint-disable-next-line prettier/prettier */}
-      {({ formState }) => <FormContent formState={formState} />}
+      {({ formState, isSubmitting }) => <FormContent formState={formState} isSubmitting={isSubmitting} />}
     </FormWrapper>
   );
 }
