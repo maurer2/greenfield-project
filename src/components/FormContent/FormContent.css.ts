@@ -27,3 +27,8 @@ export const wrapper = style({
 export const output = style({
   gridColumn: '1/-1',
 });
+
+export const errorMessage = style({
+  gridColumn: '1/-1',
+  margin: 0,
+});

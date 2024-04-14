@@ -1,126 +1,52 @@
 'use client';
 
 import type { SearchFormSubmitActionResult } from '@/app/actions/handleSearchFormSubmit/handleSearchFormSubmit';
-import type { SearchFormValues } from '@/schemas/searchForm/searchForm';
-import type { FormEvent, ReactElement, Reducer } from 'react';
+import type { ReactElement } from 'react';
 
 import InputField from '@/components/InputField/InputField';
 import SelectBox from '@/components/SelectBox/SelectBox';
-import searchFormSchema, { units } from '@/schemas/searchForm/searchForm';
+import searchFormSchema from '@/schemas/searchForm/searchForm';
 import 'animate.css';
 import clsx from 'clsx';
-import { useReducer } from 'react';
-import { useFormStatus } from 'react-dom';
-import { deserializeError } from 'serialize-error';
+import { useFormContext } from 'react-hook-form';
 
 import SubmitButton from '../SubmitButton/SubmitButton';
 import * as styles from './FormContent.css';
 
-type FormValuesActionsMap = {
-  [K in keyof SearchFormValues]: {
-    payload: SearchFormValues[K];
-    type: `UPDATE_${Uppercase<K>}`;
-  };
-} & {
-  reset: {
-    payload: never;
-    type: 'RESET';
-  };
-};
-type FormValuesActions = FormValuesActionsMap[keyof FormValuesActionsMap];
-
 export type FormContentProps = {
   formState: SearchFormSubmitActionResult;
+  isSubmitting: boolean;
 };
 
-const formValuesDefaultValues: SearchFormValues = {
-  amount: 1,
-  unit: 'sqm',
-};
+function FormContent({ isSubmitting }: FormContentProps): ReactElement {
+  const {
+    formState: { errors, isValid },
+  } = useFormContext();
 
-const formValuesReducer = (state: SearchFormValues, action: FormValuesActions) => {
-  switch (action.type) {
-    case 'UPDATE_AMOUNT': {
-      return {
-        ...state,
-        amount: action.payload,
-      };
-    }
-    case 'UPDATE_UNIT': {
-      return {
-        ...state,
-        unit: action.payload,
-      };
-    }
-    case 'RESET': {
-      return {
-        ...formValuesDefaultValues,
-      };
-    }
-    default: {
-      return {
-        ...state,
-      };
-    }
-  }
-};
-
-function FormContent({ formState }: FormContentProps): ReactElement {
-  const [formValues, dispatchFormValues] = useReducer<Reducer<SearchFormValues, FormValuesActions>>(
-    formValuesReducer,
-    formValuesDefaultValues,
-  );
-  const { pending } = useFormStatus();
-
-  const isError = formState?.status === 'error';
-  const isFailedValidation = formState?.status === 'validation-fail';
+  // ignores other user defined errors in root mentioned in https://react-hook-form.com/docs/useform/seterror
+  const hasOnlyServerErrors =
+    Object.hasOwn(errors, 'root') &&
+    typeof errors?.root === 'object' &&
+    Object.keys(errors.root).length === 1;
+  const shouldDisableSubmitButton = isSubmitting || (!isValid && !hasOnlyServerErrors);
 
   return (
     <div
-      className={clsx(
-        styles.wrapper,
-        pending && 'animate__animated animate__infinite animate__pulse',
-      )}
+      className={clsx(styles.wrapper, {
+        'animate__animated animate__infinite animate__pulse': isSubmitting,
+      })}
     >
-      <InputField
-        errors={isFailedValidation ? formState.errors.fieldErrors?.amount : undefined}
-        label="Amount"
-        name="amount"
-        onChange={(event: FormEvent<HTMLInputElement>) => {
-          const { valueAsNumber } = event.currentTarget;
+      <InputField label="Amount" name="amount" />
+      <SelectBox label="Unit" name="unit" options={searchFormSchema.shape.unit.options} />
+      <SubmitButton isDisabled={shouldDisableSubmitButton}>Calculate</SubmitButton>
 
-          dispatchFormValues({
-            payload: Number.isNaN(valueAsNumber) ? '' : valueAsNumber,
-            type: 'UPDATE_AMOUNT',
-          });
-        }}
-        value={formValues.amount.toString()}
-      />
-      <SelectBox
-        errors={isFailedValidation ? formState.errors.fieldErrors?.unit : undefined}
-        label="Unit"
-        name="unit"
-        onBlur={() => {}}
-        onChange={(event: FormEvent<HTMLSelectElement>) => {
-          const { value } = event.currentTarget;
-
-          if (!units.includes(value)) {
-            return;
-          }
-
-          // value has now been narrowed to one of the const values
-          dispatchFormValues({
-            payload: value as typeof formValues.unit,
-            type: 'UPDATE_UNIT',
-          });
-        }}
-        options={searchFormSchema.shape.unit.options}
-        value={formValues.unit}
-      />
-      <SubmitButton isDisabled={pending}>Calculate</SubmitButton>
-      {isError && !pending && (
-        <output className={styles.output}>{deserializeError(formState.error).message}</output>
-      )}
+      {/* RHF Form component calls setError with 'root.server' key but documentation mentions 'root.serverError' */}
+      {hasOnlyServerErrors ? (
+        <div className={styles.errorMessage}>
+          <p>Validation failed on the server. Please try again.</p>
+          <output>{JSON.stringify(errors.root)}</output>
+        </div>
+      ) : null}
     </div>
   );
 }
