@@ -1,7 +1,6 @@
 'use client';
 
 import type { SearchFormSubmitActionResult } from '@/app/actions/handleSearchFormSubmit/handleSearchFormSubmit';
-import type { SearchFormValues } from '@/schemas/searchForm/searchForm';
 import type { ReactElement } from 'react';
 
 import InputField from '@/components/InputField/InputField';
@@ -22,10 +21,13 @@ export type FormContentProps = {
 function FormContent({ isSubmitting }: FormContentProps): ReactElement {
   const {
     formState: { errors, isValid },
-  } = useFormContext<SearchFormValues>();
+  } = useFormContext();
 
   // ignores other user defined errors in root mentioned in https://react-hook-form.com/docs/useform/seterror
-  const hasOnlyServerErrors = Object.hasOwn(errors, 'root') && Object.keys(errors).length === 1;
+  const hasOnlyServerErrors =
+    Object.hasOwn(errors, 'root') &&
+    typeof errors?.root === 'object' &&
+    Object.keys(errors.root).length === 1;
   const shouldDisableSubmitButton = isSubmitting || (!isValid && !hasOnlyServerErrors);
 
   return (

@@ -22,7 +22,7 @@ function SelectBox<T extends keyof SearchFormValues>({
   const {
     formState: { errors },
     register,
-  } = useFormContext<SearchFormValues>();
+  } = useFormContext();
 
   const error = errors[name]?.message;
   const errorId = `${name}-error`;
@@ -50,7 +50,7 @@ function SelectBox<T extends keyof SearchFormValues>({
       </select>
       {hasError && (
         <div className={styles.errors} data-testid="select-error" id={errorId}>
-          <p>{error}</p>
+          <p>{error.toString()}</p>
         </div>
       )}
     </div>

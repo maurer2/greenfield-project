@@ -19,7 +19,7 @@ function InputField<T extends keyof SearchFormValues>({
   const {
     formState: { errors },
     register,
-  } = useFormContext<SearchFormValues>();
+  } = useFormContext();
 
   const error = errors[name]?.message;
   const errorId = `${name}-error`;
@@ -45,7 +45,7 @@ function InputField<T extends keyof SearchFormValues>({
       />
       {hasError && (
         <div className={styles.errors} data-testid="input-error" id={errorId}>
-          <p>{error}</p>
+          <p>{error.toString()}</p>
         </div>
       )}
     </div>
