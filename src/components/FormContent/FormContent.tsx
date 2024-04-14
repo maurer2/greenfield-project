@@ -1,7 +1,6 @@
 'use client';
 
 import type { SearchFormSubmitActionResult } from '@/app/actions/handleSearchFormSubmit/handleSearchFormSubmit';
-import type { SearchFormValues } from '@/schemas/searchForm/searchForm';
 import type { ReactElement } from 'react';
 
 import InputField from '@/components/InputField/InputField';
@@ -24,13 +23,15 @@ function FormContent({ formState }: FormContentProps): ReactElement {
   const methods = useFormContext<SearchFormValues>();
   const { pending } = useFormStatus();
   const {
-    formState: { errors },
-  } = useFormContext<SearchFormValues>();
+    formState: { errors, isValid },
+  } = useFormContext();
 
-  // server state -> todo: move to react hook form via error property
-  const isError = formState?.status === 'error';
-  const isFailedValidation = formState?.status === 'validation-fail';
-  const shouldDisableSubmitButton = pending || !methods.formState.isValid;
+  // ignores other user defined errors in root mentioned in https://react-hook-form.com/docs/useform/seterror
+  const hasOnlyServerErrors =
+    Object.hasOwn(errors, 'root') &&
+    typeof errors?.root === 'object' &&
+    Object.keys(errors.root).length === 1;
+  const shouldDisableSubmitButton = isSubmitting || (!isValid && !hasOnlyServerErrors);
 
   return (
     <div
