@@ -4,6 +4,7 @@ import type { FormContentProps } from '@/components/FormContent/FormContent';
 import type { SearchFormValues } from '@/schemas/searchForm/searchForm';
 import type { ElementType, ReactElement } from 'react';
 
+import searchFormSchema from '@/schemas/searchForm/searchForm';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -22,6 +23,9 @@ type FormWrapperProps = {
   children: (props: FormContentProps) => ReactElement; // FaaC
 };
 
+const hasDataInPayload = (payload: unknown): payload is { data: unknown } =>
+  typeof payload === 'object' && payload !== null && 'data' in payload;
+
 function FormWrapper({ children }: FormWrapperProps): ReactElement {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { push } = useRouter();
@@ -36,7 +40,7 @@ function FormWrapper({ children }: FormWrapperProps): ReactElement {
   return (
     <FormProvider {...methods}>
       <Form
-        action="api/calculate-football-pitch-size"
+        action="api/validate-search-form-values"
         className={styles.formWrapper}
         control={methods.control}
         // @ts-expect-error union type mismatch
@@ -53,39 +57,28 @@ function FormWrapper({ children }: FormWrapperProps): ReactElement {
         onSuccess={async ({ response }) => {
           setIsSubmitting(false);
 
-          if (response.ok) {
-            const payload = await response.json();
-
-            if (
-              typeof payload !== 'object' ||
-              payload === null ||
-              !('data' in payload) ||
-              typeof payload.data !== 'object' ||
-              payload.data === null
-            ) {
-              methods.setError('root.server', {
-                type: '400',
-              });
-              return;
-            }
-
-            console.log(payload);
-
-            if ('queryParams' in payload.data) {
-              const queryParams = new URLSearchParams({
-                amount: payload.data.queryParams.amount,
-                unit: payload.data.queryParams.unit,
-              });
-
-              push(`/calculated-results?${queryParams.toString()}`);
-              return;
-              // redirect(`/calculated-results?${queryParams.toString()}`);
-            }
-
+          const payload = await response.json();
+          if (!hasDataInPayload(payload)) {
             methods.setError('root.server', {
               type: '400',
             });
+            return;
           }
+
+          const formValues = searchFormSchema.safeParse(payload.data);
+          if (formValues.success) {
+            const queryParams = new URLSearchParams({
+              amount: formValues.data.amount.toString(),
+              unit: formValues.data.unit,
+            });
+
+            push(`/calculated-results?${queryParams.toString()}`);
+            return;
+          }
+
+          methods.setError('root.server', {
+            type: '400',
+          });
         }}
       >
         {children({

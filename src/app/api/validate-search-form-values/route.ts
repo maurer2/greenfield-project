@@ -28,10 +28,8 @@ export async function POST(request: Request) {
 
     return Response.json({
       data: {
-        queryParams: {
-          amount: amount.toString(),
-          unit: unit.toString(),
-        },
+        amount: amount.toString(),
+        unit: unit.toString(),
       },
       status: 'success',
     });
