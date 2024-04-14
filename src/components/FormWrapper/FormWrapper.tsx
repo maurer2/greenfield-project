@@ -4,11 +4,9 @@ import type { FormContentProps } from '@/components/FormContent/FormContent';
 import type { SearchFormValues } from '@/schemas/searchForm/searchForm';
 import type { ElementType, ReactElement } from 'react';
 
-import { handleSearchFormSubmit } from '@/app/actions/handleSearchFormSubmit/handleSearchFormSubmit';
 import dynamic from 'next/dynamic';
-import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { useFormState } from 'react-dom';
 import { Form, FormProvider, useForm } from 'react-hook-form';
 
 import * as styles from './FormWrapper.css';
@@ -17,25 +15,22 @@ import * as styles from './FormWrapper.css';
 // https://github.com/react-hook-form/devtools/issues/187
 const DevTools: ElementType = dynamic(
   () => import('@hookform/devtools').then((module) => module.DevTool),
-  { ssr: false },
+  { ssr: true },
 );
 
 type FormWrapperProps = {
   children: (props: FormContentProps) => ReactElement; // FaaC
 };
 
-// wrapper required to be able to use useFormStatus in child
 function FormWrapper({ children }: FormWrapperProps): ReactElement {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { push } = useRouter();
-  const [formState, action] = useFormState(handleSearchFormSubmit, null);
   const methods = useForm<SearchFormValues>({
     defaultValues: {
       amount: 1,
       unit: 'sqm',
     },
     progressive: true, // adds necessary hidden fields for form action
-    // errors: todo
   });
 
   return (
@@ -46,35 +41,55 @@ function FormWrapper({ children }: FormWrapperProps): ReactElement {
         control={methods.control}
         // @ts-expect-error union type mismatch
         method="POST"
-        onError={(response) => {
+        onError={async (response) => {
+          // automatically sets error in 'root.server'
           setIsSubmitting(false);
-          console.log('onError', response);
+          console.log('error response', await response);
         }}
         onSubmit={({ data, formData, formDataJson }) => {
           setIsSubmitting(true);
+          console.log('post request', data, formData, formDataJson);
         }}
         onSuccess={async ({ response }) => {
           setIsSubmitting(false);
 
           if (response.ok) {
-            const data = await response.json();
+            const payload = await response.json();
 
-            if ('queryParams' in data) {
+            if (
+              typeof payload !== 'object' ||
+              payload === null ||
+              !('data' in payload) ||
+              typeof payload.data !== 'object' ||
+              payload.data === null
+            ) {
+              methods.setError('root.server', {
+                type: '400',
+              });
+              return;
+            }
+
+            console.log(payload);
+
+            if ('queryParams' in payload.data) {
               const queryParams = new URLSearchParams({
-                amount: data?.queryParams.amount,
-                unit: data?.queryParams.unit,
+                amount: payload.data.queryParams.amount,
+                unit: payload.data.queryParams.unit,
               });
 
-              console.log(`/calculated-results?${queryParams.toString()}`);
-
               push(`/calculated-results?${queryParams.toString()}`);
+              return;
               // redirect(`/calculated-results?${queryParams.toString()}`);
             }
+
+            methods.setError('root.server', {
+              type: '400',
+            });
           }
         }}
       >
         {children({
-          formState,
+          formState: null,
           isSubmitting,
         })}
       </Form>

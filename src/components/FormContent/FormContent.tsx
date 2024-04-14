@@ -9,9 +9,7 @@ import SelectBox from '@/components/SelectBox/SelectBox';
 import searchFormSchema from '@/schemas/searchForm/searchForm';
 import 'animate.css';
 import clsx from 'clsx';
-import { useFormStatus } from 'react-dom';
 import { useFormContext } from 'react-hook-form';
-import { deserializeError } from 'serialize-error';
 
 import SubmitButton from '../SubmitButton/SubmitButton';
 import * as styles from './FormContent.css';
@@ -21,34 +19,31 @@ export type FormContentProps = {
   isSubmitting: boolean;
 };
 
-function FormContent({ formState, isSubmitting }: FormContentProps): ReactElement {
-  const methods = useFormContext<SearchFormValues>();
-  const { pending } = useFormStatus();
+function FormContent({ isSubmitting }: FormContentProps): ReactElement {
   const {
-    formState: { errors },
+    formState: { errors, isValid },
   } = useFormContext<SearchFormValues>();
 
-  // server state -> todo: move to react hook form via error property
-  const isError = formState?.status === 'error';
-  const isFailedValidation = formState?.status === 'validation-fail';
-  const shouldDisableSubmitButton = pending || !methods.formState.isValid;
+  // ignores other user defined errors in root mentioned in https://react-hook-form.com/docs/useform/seterror
+  const hasOnlyServerErrors = Object.hasOwn(errors, 'root') && Object.keys(errors).length === 1;
+  const shouldDisableSubmitButton = isSubmitting || (!isValid && !hasOnlyServerErrors);
 
   return (
     <div
       className={clsx(styles.wrapper, {
-        'animate__animated animate__infinite animate__pulse': pending || isSubmitting,
+        'animate__animated animate__infinite animate__pulse': isSubmitting,
       })}
     >
       <InputField label="Amount" name="amount" />
       <SelectBox label="Unit" name="unit" options={searchFormSchema.shape.unit.options} />
       <SubmitButton isDisabled={shouldDisableSubmitButton}>Calculate</SubmitButton>
-      {/* formstate error */}
-      {isError && (
-        <output className={styles.output}>{deserializeError(formState.error).message}</output>
-      )}
-      {/* RHF server error */}
-      {errors.root?.message ? (
-        <output className={styles.output}>{JSON.stringify(errors.root)}</output>
+
+      {/* RHF Form component calls setError with 'root.server' key but documentation mentions 'root.serverError' */}
+      {hasOnlyServerErrors ? (
+        <div className={styles.errorMessage}>
+          <p>Validation failed on the server. Please try again.</p>
+          <output>{JSON.stringify(errors.root)}</output>
+        </div>
       ) : null}
     </div>
   );

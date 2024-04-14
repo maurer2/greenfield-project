@@ -1,21 +1,22 @@
 import type { SearchFormErrors, SearchFormSchema } from '@/schemas/searchForm/searchForm';
 
 import searchFormSchema from '@/schemas/searchForm/searchForm';
-import { redirect } from 'next/navigation';
-import { serializeError } from 'serialize-error';
 import { ZodError } from 'zod';
 
 export async function POST(request: Request) {
+  // eslint-disable-next-line no-promise-executor-return
+  // await new Promise((resolve) => setTimeout(resolve, 1500));
+
   const payload = await request.formData();
 
   const amount = payload.get('amount');
   const unit = payload.get('unit');
 
   if (!amount || !unit) {
-    return {
-      error: serializeError(new Error('"Amount" or "Unit" value missing.')),
-      status: 'error',
-    };
+    return new Response(null, {
+      status: 400,
+      statusText: '"Amount" or "Unit" parameter are missing', // not added to error message in frontend atm
+    });
   }
 
   try {
@@ -26,22 +27,30 @@ export async function POST(request: Request) {
     console.log(`Valid form values received: ${JSON.stringify(formValues, null, 4)}`);
 
     return Response.json({
-      data: 'OK',
-      queryParams: {
-        amount: amount.toString(),
-        unit: unit.toString(),
+      data: {
+        queryParams: {
+          amount: amount.toString(),
+          unit: unit.toString(),
+        },
       },
+      status: 'success',
     });
   } catch (error) {
     if (error instanceof ZodError) {
       const searchFormErrors: SearchFormErrors = error.flatten();
 
-      return Response.json({ error: searchFormErrors });
+      return Response.json(searchFormErrors, {
+        status: 422,
+        statusText: 'Validation failed', // not added to error message in frontend atm
+      });
     }
 
-    return { error: serializeError(new Error('Unknown error.')), status: 'error' };
+    return Response.json(null, {
+      status: 500,
+      statusText: 'Unknown error', // not added to error message in frontend atm
+    });
   }
 
-  // doesn't work with RHF hook form but with regular form
-  redirect('/calculated-results?amount=1&unit=sqm');
+  // doesn't currently work with RHF hook form but with regular html form
+  // redirect('/calculated-results?amount=1&unit=sqm');
 }
