@@ -2,7 +2,7 @@
 
 import type { SearchFormSubmitActionResult } from '@/app/actions/handleSearchFormSubmit/handleSearchFormSubmit';
 import type { SearchFormValues } from '@/schemas/searchForm/searchForm';
-import type { FormEvent, ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
 import InputField from '@/components/InputField/InputField';
 import SelectBox from '@/components/SelectBox/SelectBox';
@@ -23,6 +23,9 @@ export type FormContentProps = {
 function FormContent({ formState }: FormContentProps): ReactElement {
   const methods = useFormContext<SearchFormValues>();
   const { pending } = useFormStatus();
+  const {
+    formState: { errors },
+  } = useFormContext<SearchFormValues>();
 
   // server state -> todo: move to react hook form via error property
   const isError = formState?.status === 'error';
