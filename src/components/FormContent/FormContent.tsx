@@ -44,6 +44,10 @@ function FormContent({ formState }: FormContentProps): ReactElement {
       {isError && !pending && (
         <output className={styles.output}>{deserializeError(formState.error).message}</output>
       )}
+      {/* RHF server error */}
+      {errors.root?.message ? (
+        <output className={styles.output}>{JSON.stringify(errors.root)}</output>
+      ) : null}
     </div>
   );
 }

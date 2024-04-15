@@ -6,6 +6,7 @@ import type { ElementType, ReactElement } from 'react';
 
 import { handleSearchFormSubmit } from '@/app/actions/handleSearchFormSubmit/handleSearchFormSubmit';
 import dynamic from 'next/dynamic';
+import { redirect, useRouter } from 'next/navigation';
 import { useFormState } from 'react-dom';
 
 import * as styles from './FormWrapper.css';
@@ -23,6 +24,7 @@ type FormWrapperProps = {
 
 // wrapper required to be able to use useFormStatus in child
 function FormWrapper({ children }: FormWrapperProps): ReactElement {
+  const { push } = useRouter();
   const [formState, action] = useFormState(handleSearchFormSubmit, null);
   const methods = useForm<SearchFormValues>({
     defaultValues: {
