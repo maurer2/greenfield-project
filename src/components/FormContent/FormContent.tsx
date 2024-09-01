@@ -10,8 +10,9 @@ import SelectBox from '@/components/SelectBox/SelectBox';
 import searchFormSchema from '@/schemas/searchForm/searchForm';
 import 'animate.css';
 import clsx from 'clsx';
+import { useRef } from 'react';
 import { useFormState as useActionState, useFormStatus } from 'react-dom';
-import { FormProvider, SubmitHandler, useForm, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { deserializeError } from 'serialize-error';
 
 import SubmitButton from '../SubmitButton/SubmitButton';
@@ -22,28 +23,36 @@ export type FormContentProps = {
 };
 
 function FormContent(): ReactElement {
-  const [formState, action] = useActionState(handleSearchFormSubmit, null);
-
-  const form = useFormContext<SearchFormValues>();
+  const [formState, formAction] = useActionState(handleSearchFormSubmit, null);
+  const formRef = useRef<HTMLFormElement | null>(null);
   const { pending } = useFormStatus();
   const {
-    formState: { errors, isValid },
+    formState: { errors, isSubmitting, isValid },
+    handleSubmit,
   } = useFormContext();
 
-  console.log(formState);
+  const onSubmit = () => {
+    handleSubmit(() => formRef.current?.submit());
+  };
+
+  console.log(isSubmitting, pending);
 
   // ignores other user defined errors in root mentioned in https://react-hook-form.com/docs/useform/seterror
   const hasOnlyServerErrors =
     Object.hasOwn(errors, 'root') &&
     typeof errors?.root === 'object' &&
     Object.keys(errors.root).length === 1;
-  const shouldDisableSubmitButton = pending || (!isValid && !hasOnlyServerErrors);
+  const shouldDisableSubmitButton = isSubmitting || (!isValid && !hasOnlyServerErrors);
 
   return (
-    <div
+    <form
+      action={formAction}
+      aria-label="Main form"
       className={clsx(styles.wrapper, {
-        // 'animate__animated animate__infinite animate__pulse': pending,
+        'animate__animated animate__infinite animate__pulse': isSubmitting,
       })}
+      onSubmit={onSubmit}
+      ref={formRef}
     >
       <InputField label="Amount" name="amount" />
       <SelectBox label="Unit" name="unit" options={searchFormSchema.shape.unit.options} />
@@ -55,7 +64,7 @@ function FormContent(): ReactElement {
       {errors.root?.message ? (
         <output className={styles.output}>{JSON.stringify(errors.root)}</output>
       ) : null}
-    </div>
+    </form>
   );
 }
 
