@@ -1,9 +1,11 @@
 'use client';
 
 import type { FormContentProps } from '@/components/FormContent/FormContent';
-import type { SearchFormSchema, SearchFormValues } from '@/schemas/searchForm/searchForm';
+import type { SearchFormValues } from '@/schemas/searchForm/searchForm';
 import type { ElementType, ReactElement } from 'react';
 
+import searchFormSchema from '@/schemas/searchForm/searchForm';
+import { zodResolver } from '@hookform/resolvers/zod';
 import dynamic from 'next/dynamic';
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -25,6 +27,7 @@ function FormWrapper({ children }: FormWrapperProps): ReactElement {
       amount: 1,
       unit: 'sqm',
     },
+    resolver: zodResolver(searchFormSchema),
     // errors: todo
   });
 

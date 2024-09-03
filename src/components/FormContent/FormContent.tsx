@@ -35,8 +35,6 @@ function FormContent(): ReactElement {
     handleSubmit(() => formRef.current?.submit());
   };
 
-  console.log(isSubmitting, pending);
-
   // ignores other user defined errors in root mentioned in https://react-hook-form.com/docs/useform/seterror
   const hasOnlyServerErrors =
     Object.hasOwn(errors, 'root') &&

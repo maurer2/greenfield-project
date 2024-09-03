@@ -1,6 +1,7 @@
 import type { SearchFormValues } from '@/schemas/searchForm/searchForm';
 import type { ReactElement } from 'react';
 
+import { useFormStatus } from 'react-dom';
 import { FormProvider, SubmitHandler, useForm, useFormContext } from 'react-hook-form';
 
 import * as styles from './inputField.css';
@@ -26,6 +27,10 @@ function InputField<T extends keyof SearchFormValues>({
 
   const hasError = !!error;
   const currentInputState: InputStyleVariant = hasError ? 'invalid' : 'default';
+
+  const { pending } = useFormStatus();
+
+  console.log('pending', pending);
 
   return (
     <div className={styles.fieldWrapper}>

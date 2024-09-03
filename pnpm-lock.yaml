@@ -11,6 +11,9 @@ importers:
       '@hookform/devtools':
         specifier: ^4.3.1
         version: 4.3.1(@types/react@18.2.37)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@hookform/resolvers':
+        specifier: ^3.9.0
+        version: 3.9.0(react-hook-form@7.53.0(react@18.2.0))
       '@playwright/experimental-ct-react':
         specifier: ^1.41.1
         version: 1.41.1(@types/node@20.9.1)(terser@5.31.6)(vite@5.0.12(@types/node@20.9.1)(terser@5.31.6))
@@ -46,7 +49,7 @@ importers:
         version: 1.14.0
       '@vanilla-extract/next-plugin':
         specifier: ^2.3.3
-        version: 2.3.3(@types/node@20.9.1)(next@14.1.4(@babel/core@7.23.7)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(terser@5.31.6)(webpack@5.89.0)
+        version: 2.3.3(@types/node@20.9.1)(next@14.1.4(@babel/core@7.23.3)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(terser@5.31.6)(webpack@5.89.0)
       '@vanilla-extract/vite-plugin':
         specifier: ^3.9.4
         version: 3.9.4(@types/node@20.9.1)(terser@5.31.6)(vite@5.0.12(@types/node@20.9.1)(terser@5.31.6))
@@ -88,7 +91,7 @@ importers:
         version: 2.0.0
       next:
         specifier: 14.1.4
-        version: 14.1.4(@babel/core@7.23.7)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        version: 14.1.4(@babel/core@7.23.3)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       prettier:
         specifier: ^3.2.4
         version: 3.2.4
@@ -1300,6 +1303,11 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18
       react-dom: ^16.8.0 || ^17 || ^18
+
+  '@hookform/resolvers@3.9.0':
+    resolution: {integrity: sha512-bU0Gr4EepJ/EQsH/IwEzYLsT/PEj5C0ynLQ4m+GSHS+xKH4TfSelhluTgOaoc4kA5s7eCsQbM4wvZLzELmWzUg==}
+    peerDependencies:
+      react-hook-form: ^7.0.0
 
   '@humanwhocodes/config-array@0.11.13':
     resolution: {integrity: sha512-JSBDMiDKSzQVngfRjOdFXgFfklaXI4K9nLF49Auh21lmBWRLIK3+xTErTWD4KU54pb6coM6ESE7Awz/FNU3zgQ==}
@@ -4819,6 +4827,10 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
+  '@hookform/resolvers@3.9.0(react-hook-form@7.53.0(react@18.2.0))':
+    dependencies:
+      react-hook-form: 7.53.0(react@18.2.0)
+
   '@humanwhocodes/config-array@0.11.13':
     dependencies:
       '@humanwhocodes/object-schema': 2.0.1
@@ -5325,10 +5337,10 @@ snapshots:
       - supports-color
       - terser
 
-  '@vanilla-extract/next-plugin@2.3.3(@types/node@20.9.1)(next@14.1.4(@babel/core@7.23.7)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(terser@5.31.6)(webpack@5.89.0)':
+  '@vanilla-extract/next-plugin@2.3.3(@types/node@20.9.1)(next@14.1.4(@babel/core@7.23.3)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(terser@5.31.6)(webpack@5.89.0)':
     dependencies:
       '@vanilla-extract/webpack-plugin': 2.3.2(@types/node@20.9.1)(terser@5.31.6)(webpack@5.89.0)
-      next: 14.1.4(@babel/core@7.23.7)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      next: 14.1.4(@babel/core@7.23.3)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -6727,7 +6739,7 @@ snapshots:
 
   neo-async@2.6.2: {}
 
-  next@14.1.4(@babel/core@7.23.7)(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
+  next@14.1.4(@babel/core@7.23.3)(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
       '@next/env': 14.1.4
       '@swc/helpers': 0.5.2
@@ -6737,7 +6749,7 @@ snapshots:
       postcss: 8.4.31
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-      styled-jsx: 5.1.1(@babel/core@7.23.7)(react@18.2.0)
+      styled-jsx: 5.1.1(@babel/core@7.23.3)(react@18.2.0)
     optionalDependencies:
       '@next/swc-darwin-arm64': 14.1.4
       '@next/swc-darwin-x64': 14.1.4
@@ -7171,12 +7183,12 @@ snapshots:
 
   strip-json-comments@3.1.1: {}
 
-  styled-jsx@5.1.1(@babel/core@7.23.7)(react@18.2.0):
+  styled-jsx@5.1.1(@babel/core@7.23.3)(react@18.2.0):
     dependencies:
       client-only: 0.0.1
       react: 18.2.0
     optionalDependencies:
-      '@babel/core': 7.23.7
+      '@babel/core': 7.23.3
 
   stylis@4.2.0: {}
 
