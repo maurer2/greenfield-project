@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react';
 
 import * as styles from './background.css';
-import Lines from './lines.svg?react';
+import Lines from './lines.svg';
 
 function Background(): ReactElement {
   return (

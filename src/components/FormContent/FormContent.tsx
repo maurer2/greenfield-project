@@ -11,7 +11,8 @@ import searchFormSchema from '@/schemas/searchForm/searchForm';
 import 'animate.css';
 import clsx from 'clsx';
 import { useRef } from 'react';
-import { useFormState as useActionState, useFormStatus } from 'react-dom';
+import { useActionState } from 'react';
+import { useFormStatus } from 'react-dom';
 import { useFormContext } from 'react-hook-form';
 import { deserializeError } from 'serialize-error';
 
@@ -29,7 +30,7 @@ function FormContent(): ReactElement {
   const {
     formState: { errors, isSubmitting, isValid },
     handleSubmit,
-  } = useFormContext();
+  } = useFormContext<SearchFormValues>();
 
   const onSubmit = () => {
     handleSubmit(() => formRef.current?.submit());
@@ -60,7 +61,7 @@ function FormContent(): ReactElement {
       )}
       {/* RHF server error */}
       {errors.root?.message ? (
-        <output className={styles.output}>{JSON.stringify(errors.root)}</output>
+        <div className={styles.output}>{JSON.stringify(errors.root)}</div>
       ) : null}
     </form>
   );

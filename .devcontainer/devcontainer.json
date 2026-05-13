@@ -3,17 +3,15 @@
 {
   "name": "Node.js & TypeScript",
   // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-  "image": "mcr.microsoft.com/devcontainers/typescript-node:0-20",
-
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:24",
   // Features to add to the dev container. More info: https://containers.dev/features.
   // "features": {},
-
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
-  "forwardPorts": [3000],
-
+  "forwardPorts": [
+    3000
+  ],
   // Use 'postCreateCommand' to run commands after the container is created.
   // "postCreateCommand": "yarn install",
-
   // Configure tool-specific properties.
   "customizations": {
     "vscode": {
@@ -24,27 +22,30 @@
         "editor.inlayHints.enabled": "on",
         // terminal
         "terminal.integrated.defaultProfile.linux": "zsh",
-        // typescript
-        "typescript.validate.enable": true,
-        "typescript.inlayHints.variableTypes.enabled": true,
-        "typescript.inlayHints.parameterTypes.enabled": true,
-        "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
-        "typescript.inlayHints.enumMemberValues.enabled": true,
-        "typescript.inlayHints.parameterNames.enabled": "literals",
-        "typescript.inlayHints.propertyDeclarationTypes.enabled": true,
-        // javascript
-        "javascript.validate.enable": true,
-        "javascript.inlayHints.variableTypes.enabled": true,
-        "javascript.inlayHints.parameterNames.enabled": "literals",
-        "javascript.inlayHints.propertyDeclarationTypes.enabled": true,
-        "javascript.inlayHints.parameterTypes.enabled": true,
-        "javascript.inlayHints.functionLikeReturnTypes.enabled": true,
-        "javascript.inlayHints.enumMemberValues.enabled": true,
+        // typescript & javascript
+        "js/ts.preferences.importModuleSpecifier": "relative",
+        "js/ts.experimental.useTsgo": false,
+        "js/ts.validate.enable": true,
+        "js/ts.inlayHints.variableTypes.enabled": true,
+        "js/ts.inlayHints.parameterTypes.enabled": true,
+        "js/ts.inlayHints.functionLikeReturnTypes.enabled": true,
+        "js/ts.inlayHints.enumMemberValues.enabled": true,
+        "js/ts.inlayHints.parameterNames.enabled": "literals",
+        "js/ts.inlayHints.propertyDeclarationTypes.enabled": true,
+        "js/ts.inlayHints.variableTypes.suppressWhenTypeMatchesName": false, // show variable type hints even for primitives (e.g. strings, numbers, booleans)
+        // eslint
+        "eslint.useFlatConfig": false,
         // markdown
         "markdown.preview.scrollEditorWithPreview": true,
         "markdown.preview.scrollPreviewWithEditor": true,
         // icons
-        "vsicons.presets.jsOfficial": true
+        "vsicons.presets.jsOfficial": true,
+        "workbench.editorAssociations": {
+          "*.svg": "default" // https://stackoverflow.com/questions/79363302/how-to-disable-svg-preview-in-vs-code-1-97/79427278#79427278
+        },
+        // react-compiler-marker
+        "reactCompilerMarker.successEmoji": "✅",
+        "reactCompilerMarker.errorEmoji": "🚫"
       },
       "extensions": [
         "aaron-bond.better-comments",
@@ -90,12 +91,23 @@
         "yatki.vscode-surround",
         // "Orta.vscode-jest", // jest
         "vitest.explorer", // vitest
+        // "ms-playwright.playwright"
         "yoavbls.pretty-ts-errors",
-        "mikestead.dotenv"
+        "mikestead.dotenv",
+        "vunguyentuan/vscode-css-variables",
+        "qcz/vscode-restart-ts-server-button",
+        "microsoft/vscode-pull-request-github",
+        "github.copilot",
+        "vincaslt.highlight-matching-tag",
+        // "oven.bun-vscode",
+        // "biomejs.biome"
+        // astro-build.astro-vscode",
+        "tamasfe.even-better-toml",
+        // "attilabuti.vscode-mjml",
+        "blazejkustra.react-compiler-marker"
       ]
     }
   }
-
   // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
   // "remoteUser": "root"
 }

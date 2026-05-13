@@ -55,8 +55,8 @@ import * as styles from './page.css';
 //   }),
 // ];
 
-export default async function Results({ searchParams }: { searchParams: Record<string, string> }) {
-  const params = searchParams;
+export default async function Results({ searchParams }: { searchParams: Promise<Record<string, string>> }) {
+  const params = await searchParams;
 
   return (
     <main className={styles.page}>

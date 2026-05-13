@@ -11,15 +11,16 @@ const nextConfig = {
     // adds support for ?react that is required in vite for vite-plugin-svgr
     config.module.rules.push({
       test: /\.svg$/i,
-      oneOf: [
-        {
-          resourceQuery: /react/,
-          use: ['@svgr/webpack'],
-        },
-        {
-          use: ['@svgr/webpack'],
-        },
-      ],
+      // oneOf: [
+      //   {
+      //     resourceQuery: /react/,
+      //     use: ['@svgr/webpack'],
+      //   },
+      //   {
+      //     use: ['@svgr/webpack'],
+      //   },
+      // ],
+      use: ['@svgr/webpack'],
     });
 
     return config;

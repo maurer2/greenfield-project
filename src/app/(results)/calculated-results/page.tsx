@@ -7,11 +7,11 @@ import Link from 'next/link';
 import * as styles from './error.css';
 
 type PageProps = {
-  searchParams?: SearchFormQueryParamsRawSchema;
+  searchParams?: Promise<SearchFormQueryParamsRawSchema>;
 };
 
 export default async function Results({ searchParams }: PageProps) {
-  const searchParamsClean = searchFormQueryParamsSchema.safeParse(searchParams);
+  const searchParamsClean = searchFormQueryParamsSchema.safeParse(await searchParams);
 
   // workaround
   if (!searchParamsClean.success) {
