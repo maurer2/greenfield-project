@@ -1,7 +1,7 @@
 import type { SearchFormValues } from '@/schemas/searchForm/searchForm';
 import type { ReactElement } from 'react';
 
-import { useFormContext } from 'react-hook-form';
+import { useSearchFormContext } from '../FormWrapper/FormWrapper';
 
 import * as styles from './inputField.css';
 
@@ -20,7 +20,7 @@ function InputField<T extends keyof SearchFormValues>({
     formState: { errors },
     getValues,
     register,
-  } = useFormContext();
+  } = useSearchFormContext();
 
   const error = errors[name]?.message;
   const errorId = `${name}-error`;

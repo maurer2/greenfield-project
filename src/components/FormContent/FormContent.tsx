@@ -1,6 +1,5 @@
 'use client';
 
-import type { SearchFormValues } from '@/schemas/searchForm/searchForm';
 import type { ReactElement } from 'react';
 
 import { handleSearchFormSubmit } from '@/app/actions/handleSearchFormSubmit/handleSearchFormSubmit';
@@ -10,8 +9,8 @@ import searchFormSchema from '@/schemas/searchForm/searchForm';
 import 'animate.css';
 import clsx from 'clsx';
 import { useRef, useActionState, startTransition } from 'react';
-import { useFormContext } from 'react-hook-form';
 import { deserializeError } from 'serialize-error';
+import { useSearchFormContext } from '../FormWrapper/FormWrapper';
 
 import SubmitButton from '../SubmitButton/SubmitButton';
 import * as styles from './FormContent.css';
@@ -26,9 +25,9 @@ function FormContent(): ReactElement {
   const {
     formState: { errors, isSubmitting },
     handleSubmit,
-  } = useFormContext<SearchFormValues>();
+  } = useSearchFormContext();
 
-  const onSubmit = handleSubmit((data: SearchFormValues) => {
+  const onSubmit = handleSubmit((data) => {
     const formData = new FormData();
     formData.append('amount', data.amount.toString());
     formData.append('unit', data.unit);

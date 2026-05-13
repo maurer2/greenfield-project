@@ -7,7 +7,7 @@ import type { ElementType, ReactElement } from 'react';
 import searchFormSchema from '@/schemas/searchForm/searchForm';
 import { zodResolver } from '@hookform/resolvers/zod';
 import dynamic from 'next/dynamic';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 
 // avoid hydration errors
 // https://github.com/react-hook-form/devtools/issues/187
@@ -20,7 +20,6 @@ type FormWrapperProps = {
   children: ReactElement;
 };
 
-// wrapper required to be able to use useFormStatus in child
 function FormWrapper({ children }: FormWrapperProps): ReactElement {
   const form = useForm<SearchFormValues>({
     defaultValues: {
@@ -38,5 +37,8 @@ function FormWrapper({ children }: FormWrapperProps): ReactElement {
     </FormProvider>
   );
 }
+
+// context helper hook for proper types
+export const useSearchFormContext = () => useFormContext<SearchFormValues>();
 
 export default FormWrapper;
