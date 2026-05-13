@@ -1,8 +1,7 @@
 import type { SearchFormValues } from '@/schemas/searchForm/searchForm';
 import type { ReactElement } from 'react';
 
-import { useFormStatus } from 'react-dom';
-import { FormProvider, SubmitHandler, useForm, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 import * as styles from './inputField.css';
 
@@ -19,6 +18,7 @@ function InputField<T extends keyof SearchFormValues>({
 }: InputFieldProps<T>): ReactElement {
   const {
     formState: { errors },
+    getValues,
     register,
   } = useFormContext();
 
@@ -28,9 +28,8 @@ function InputField<T extends keyof SearchFormValues>({
   const hasError = !!error;
   const currentInputState: InputStyleVariant = hasError ? 'invalid' : 'default';
 
-  const { pending } = useFormStatus();
-
-  console.log('pending', pending);
+  const defaultValue = getValues(name) ?? '';
+  const placeholder = `Enter ${label}`;
 
   return (
     <div className={styles.fieldWrapper}>
@@ -38,13 +37,14 @@ function InputField<T extends keyof SearchFormValues>({
         {label}
       </label>
       <input
-        {...register('amount', {
+        {...register(name, {
           valueAsNumber: true,
         })}
+        defaultValue={defaultValue}
         aria-describedby={hasError ? errorId : undefined}
-        aria-invalid={hasError ? 'true' : 'false'}
+        aria-invalid={hasError ? 'true' : undefined}
         className={styles.input[currentInputState]}
-        placeholder={`Enter ${label}`}
+        placeholder={placeholder}
         required
         type="number"
       />

@@ -1,7 +1,6 @@
 'use client';
 
-import type { SearchFormSubmitActionResult } from '@/app/actions/handleSearchFormSubmit/handleSearchFormSubmit';
-import type { SearchFormSchema, SearchFormValues } from '@/schemas/searchForm/searchForm';
+import type { SearchFormValues } from '@/schemas/searchForm/searchForm';
 import type { ReactElement } from 'react';
 
 import { handleSearchFormSubmit } from '@/app/actions/handleSearchFormSubmit/handleSearchFormSubmit';
@@ -10,9 +9,7 @@ import SelectBox from '@/components/SelectBox/SelectBox';
 import searchFormSchema from '@/schemas/searchForm/searchForm';
 import 'animate.css';
 import clsx from 'clsx';
-import { useRef } from 'react';
-import { useActionState } from 'react';
-import { useFormStatus } from 'react-dom';
+import { useRef, useActionState, startTransition } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { deserializeError } from 'serialize-error';
 
@@ -24,44 +21,50 @@ export type FormContentProps = {
 };
 
 function FormContent(): ReactElement {
-  const [formState, formAction] = useActionState(handleSearchFormSubmit, null);
+  const [formState, formAction, isPending] = useActionState(handleSearchFormSubmit, null);
   const formRef = useRef<HTMLFormElement | null>(null);
-  const { pending } = useFormStatus();
   const {
-    formState: { errors, isSubmitting, isValid },
+    formState: { errors, isSubmitting },
     handleSubmit,
   } = useFormContext<SearchFormValues>();
 
-  const onSubmit = () => {
-    handleSubmit(() => formRef.current?.submit());
-  };
+  const onSubmit = handleSubmit((data: SearchFormValues) => {
+    const formData = new FormData();
+    formData.append('amount', data.amount.toString());
+    formData.append('unit', data.unit);
 
-  // ignores other user defined errors in root mentioned in https://react-hook-form.com/docs/useform/seterror
-  const hasOnlyServerErrors =
-    Object.hasOwn(errors, 'root') &&
-    typeof errors?.root === 'object' &&
-    Object.keys(errors.root).length === 1;
-  const shouldDisableSubmitButton = isSubmitting || (!isValid && !hasOnlyServerErrors);
+    // side effect: useFormStatus in child components won't work when formAction is called in a transaction
+    startTransition(() => {
+      formAction(formData);
+    });
+  });
+
+  const shouldDisableSubmitButton = isSubmitting || isPending;
 
   return (
     <form
-      action={formAction}
       aria-label="Main form"
       className={clsx(styles.wrapper, {
         'animate__animated animate__infinite animate__pulse': isSubmitting,
       })}
+      noValidate
       onSubmit={onSubmit}
       ref={formRef}
+      aria-busy={isPending}
     >
       <InputField label="Amount" name="amount" />
       <SelectBox label="Unit" name="unit" options={searchFormSchema.shape.unit.options} />
       <SubmitButton isDisabled={shouldDisableSubmitButton}>Calculate</SubmitButton>
-      {formState?.status === 'error' && !pending && (
-        <output className={styles.output}>{deserializeError(formState.error).message}</output>
+
+      {formState?.status === 'error' && !isPending && (
+        <div role="alert" className={styles.output}>
+          {deserializeError(formState.error).message}
+        </div>
       )}
-      {/* RHF server error */}
       {errors.root?.message ? (
-        <div className={styles.output}>{JSON.stringify(errors.root)}</div>
+        <div role="alert" className={styles.output}>
+          {JSON.stringify(errors.root)}
+        </div>
       ) : null}
     </form>
   );

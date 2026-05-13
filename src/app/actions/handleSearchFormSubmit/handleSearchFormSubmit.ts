@@ -5,7 +5,7 @@ import type { ErrorObject } from 'serialize-error';
 
 import searchFormSchema from '@/schemas/searchForm/searchForm';
 import { redirect } from 'next/navigation';
-// import { setTimeout as setTimeoutNode } from 'node:timers/promises';
+import { setTimeout as setTimeoutNode } from 'node:timers/promises';
 import { serializeError } from 'serialize-error';
 
 export type SearchFormSubmitActionResult =
@@ -23,7 +23,7 @@ export async function handleSearchFormSubmit(
   prevSearchFormSubmitActionResult: SearchFormSubmitActionResult,
   formData: FormData,
 ): Promise<SearchFormSubmitActionResult> {
-  // await setTimeoutNode(1500);
+  await setTimeoutNode(1000);
 
   const amount = formData.get('amount');
   const unit = formData.get('unit');

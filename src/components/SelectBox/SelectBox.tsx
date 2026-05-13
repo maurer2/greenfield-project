@@ -1,7 +1,7 @@
 import type { SearchFormValues } from '@/schemas/searchForm/searchForm';
 import type { ReactElement } from 'react';
 
-import { FormProvider, SubmitHandler, useForm, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 import * as styles from './SelectBox.css';
 
@@ -21,6 +21,7 @@ function SelectBox<T extends keyof SearchFormValues>({
 }: SelectBoxProps<T>): ReactElement {
   const {
     formState: { errors },
+    getValues,
     register,
   } = useFormContext();
 
@@ -30,15 +31,18 @@ function SelectBox<T extends keyof SearchFormValues>({
   const hasError = !!error;
   const currentSelectState: SelectStyleVariant = hasError ? 'invalid' : 'default';
 
+  const defaultValue = getValues(name) ?? '';
+
   return (
     <div className={styles.fieldWrapper}>
       <label className={styles.label} htmlFor={name}>
         {label}
       </label>
       <select
-        {...register('unit')}
+        {...register(name)}
+        defaultValue={defaultValue}
         aria-describedby={hasError ? errorId : undefined}
-        aria-invalid={hasError ? 'true' : 'false'}
+        aria-invalid={hasError ? 'true' : undefined}
         className={styles.select[currentSelectState]}
         required
       >
