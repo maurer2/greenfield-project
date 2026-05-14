@@ -49,6 +49,7 @@ function FormContent(): ReactElement {
   return (
     <form
       aria-label="Search form"
+      aria-describedby="form-hint"
       className={clsx(styles.wrapper, {
         'animate__animated animate__infinite animate__pulse': isSubmitting,
       })}
@@ -57,18 +58,22 @@ function FormContent(): ReactElement {
       ref={formRef}
       aria-busy={isPending}
     >
+      <p id="form-hint" className="sr-only">
+        Enter an amount and select a unit to get the converted value.
+      </p>
       <InputField label="Amount" name="amount" />
       <SelectBox label="Unit" name="unit" options={searchFormSchema.shape.unit.options} />
       <SubmitButton isDisabled={shouldDisableSubmitButton}>Calculate</SubmitButton>
 
-      <div aria-live="assertive" aria-atomic="true" className={styles.output}>
-        {formState?.status === 'error' && !isPending
+      <div role="alert" className={styles.output}>
+        {!isPending && formState?.status === 'error'
           ? deserializeError(formState.error).message
           : null}
       </div>
-      <div aria-live="assertive" aria-atomic="true" className={styles.output}>
+      {/* server errors currently not passed to useForm hook via errors prop */}
+      {/* <div role="alert" className={styles.output}>
         {errors.root?.message ?? null}
-      </div>
+      </div> */}
     </form>
   );
 }
