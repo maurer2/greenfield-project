@@ -55,7 +55,11 @@ import * as styles from './page.css';
 //   }),
 // ];
 
-export default async function Results({ searchParams }: { searchParams: Promise<Record<string, string>> }) {
+export default async function Results({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string>>;
+}) {
   const params = await searchParams;
 
   return (
