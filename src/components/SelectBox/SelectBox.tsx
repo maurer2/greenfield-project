@@ -40,6 +40,7 @@ function SelectBox<T extends keyof SearchFormValues>({
       </label>
       <select
         {...register(name)}
+        id={name}
         defaultValue={defaultValue}
         aria-describedby={hasError ? errorId : undefined}
         aria-invalid={hasError ? 'true' : undefined}

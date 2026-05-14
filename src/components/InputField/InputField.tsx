@@ -40,6 +40,7 @@ function InputField<T extends keyof SearchFormValues>({
         {...register(name, {
           valueAsNumber: true,
         })}
+        id={name}
         defaultValue={defaultValue}
         aria-describedby={hasError ? errorId : undefined}
         aria-invalid={hasError ? 'true' : undefined}
