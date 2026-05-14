@@ -16,8 +16,8 @@ function SubmitButton({
 }: PropsWithChildren<SubmitButtonProps>): ReactElement {
   return (
     <button
+      aria-disabled={isDisabled}
       className={styles.submitButton}
-      disabled={isDisabled}
       onBlur={onBlur}
       onClick={onClick}
       type="submit"

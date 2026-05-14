@@ -26,9 +26,9 @@ function SelectBox<T extends keyof SearchFormValues>({
   } = useSearchFormContext();
 
   const error = errors[name]?.message;
-  const errorId = `${name}-error`;
 
   const hasError = !!error;
+  const errorId = `${name}-error`;
   const currentSelectState: SelectStyleVariant = hasError ? 'invalid' : 'default';
 
   const defaultValue = getValues(name) ?? '';

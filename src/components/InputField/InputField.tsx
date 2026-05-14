@@ -23,9 +23,9 @@ function InputField<T extends keyof SearchFormValues>({
   } = useSearchFormContext();
 
   const error = errors[name]?.message;
-  const errorId = `${name}-error`;
 
   const hasError = !!error;
+  const errorId = `${name}-error`;
   const currentInputState: InputStyleVariant = hasError ? 'invalid' : 'default';
 
   const defaultValue = getValues(name) ?? '';

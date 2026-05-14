@@ -28,6 +28,10 @@ function FormContent(): ReactElement {
   } = useSearchFormContext();
 
   const onSubmit = handleSubmit((data) => {
+    if (isPending) {
+      return;
+    }
+
     const formData = new FormData();
     formData.append('amount', data.amount.toString());
     formData.append('unit', data.unit);
@@ -38,11 +42,13 @@ function FormContent(): ReactElement {
     });
   });
 
+  // isSubmitting - covers time from submit via button or enter until transition starts, which is not awaited
+  // isPending - covers time from transition start until transition end
   const shouldDisableSubmitButton = isSubmitting || isPending;
 
   return (
     <form
-      aria-label="Main form"
+      aria-label="Search form"
       className={clsx(styles.wrapper, {
         'animate__animated animate__infinite animate__pulse': isSubmitting,
       })}
@@ -55,16 +61,14 @@ function FormContent(): ReactElement {
       <SelectBox label="Unit" name="unit" options={searchFormSchema.shape.unit.options} />
       <SubmitButton isDisabled={shouldDisableSubmitButton}>Calculate</SubmitButton>
 
-      {formState?.status === 'error' && !isPending && (
-        <div role="alert" className={styles.output}>
-          {deserializeError(formState.error).message}
-        </div>
-      )}
-      {errors.root?.message ? (
-        <div role="alert" className={styles.output}>
-          {JSON.stringify(errors.root)}
-        </div>
-      ) : null}
+      <div aria-live="assertive" aria-atomic="true" className={styles.output}>
+        {formState?.status === 'error' && !isPending
+          ? deserializeError(formState.error).message
+          : null}
+      </div>
+      <div aria-live="assertive" aria-atomic="true" className={styles.output}>
+        {errors.root?.message ?? null}
+      </div>
     </form>
   );
 }
