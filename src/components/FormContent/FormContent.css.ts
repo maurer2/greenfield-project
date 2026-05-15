@@ -13,7 +13,7 @@ export const wrapper = style({
     'screen and (min-width: 480px)': {
       borderWidth: '4px',
       gridTemplateColumns: '7.5rem 7rem max-content',
-      gridTemplateRows: 'max-content 1fr auto',
+      gridTemplateRows: '[labels] max-content [fields] 1fr [field-errors] auto [form-errors]',
     },
   },
   // eslint-disable-next-line
@@ -24,6 +24,6 @@ export const wrapper = style({
   },
 });
 
-export const output = style({
+export const formErrors = style({
   gridColumn: '1/-1',
 });

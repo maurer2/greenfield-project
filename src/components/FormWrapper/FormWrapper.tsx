@@ -27,7 +27,6 @@ function FormWrapper({ children }: FormWrapperProps): ReactElement {
       unit: 'sqm',
     },
     resolver: zodResolver(searchFormSchema),
-    // errors: todo
   });
 
   return (

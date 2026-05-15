@@ -1,14 +1,17 @@
 'use server';
 
-import type { SearchFormErrors } from '@/schemas/searchForm/searchForm';
 import type { ErrorObject } from 'serialize-error';
 
-import searchFormSchema from '@/schemas/searchForm/searchForm';
 import { redirect } from 'next/navigation';
 import { setTimeout as setTimeoutNode } from 'node:timers/promises';
 import { serializeError } from 'serialize-error';
 
+import type { SearchFormErrors } from '@/schemas/searchForm/searchForm';
+
+import searchFormSchema from '@/schemas/searchForm/searchForm';
+
 export type SearchFormSubmitActionResult =
+  | null
   | {
       error: ErrorObject;
       status: 'error';
@@ -16,37 +19,37 @@ export type SearchFormSubmitActionResult =
   | {
       errors: SearchFormErrors;
       status: 'validation-fail';
-    }
-  | null;
+    };
 
 export async function handleSearchFormSubmit(
   prevSearchFormSubmitActionResult: SearchFormSubmitActionResult,
   formData: FormData,
 ): Promise<SearchFormSubmitActionResult> {
-  await setTimeoutNode(1000);
+  let resultsPageUrl: null | string = null;
 
-  const amount = formData.get('amount');
-  const unit = formData.get('unit');
+  try {
+    await setTimeoutNode(1000);
 
-  if (!amount || !unit) {
-    return {
-      error: serializeError(new Error('"Amount" or "Unit" value missing.')),
-      status: 'error',
-    };
+    const result = searchFormSchema.safeParse({
+      amount: formData.get('amount'),
+      unit: formData.get('unit'),
+    });
+    if (!result.success) {
+      return { errors: result.error.flatten(), status: 'validation-fail' };
+    }
+
+    console.log(`Valid form values received: ${JSON.stringify(result.data, null, 4)}`);
+    const queryParams = new URLSearchParams({
+      amount: result.data.amount.toString(),
+      unit: result.data.unit,
+    });
+
+    // redirect can't be used here as it triggers an error itself
+    // https://nextjs.org/docs/app/api-reference/functions/redirect
+    resultsPageUrl = `/calculated-results?${queryParams.toString()}`;
+  } catch (error) {
+    return { error: serializeError(error), status: 'error' };
   }
 
-  const result = searchFormSchema.safeParse({ amount, unit });
-  if (!result.success) {
-    const searchFormErrors = result.error.flatten();
-
-    return { errors: searchFormErrors, status: 'validation-fail' };
-  }
-
-  console.log(`Valid form values received: ${JSON.stringify(result.data, null, 4)}`);
-  const queryParams = new URLSearchParams({
-    amount: amount.toString(),
-    unit: unit.toString(),
-  });
-
-  return redirect(`/calculated-results?${queryParams.toString()}`);
+  return redirect(resultsPageUrl);
 }

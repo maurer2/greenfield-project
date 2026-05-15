@@ -2,32 +2,62 @@
 
 import type { ReactElement } from 'react';
 
+import clsx from 'clsx';
+import { startTransition, useActionState, useEffect, useRef } from 'react';
+import { deserializeError } from 'serialize-error';
+
 import { handleSearchFormSubmit } from '@/app/actions/handleSearchFormSubmit/handleSearchFormSubmit';
+import 'animate.css';
+
 import InputField from '@/components/InputField/InputField';
 import SelectBox from '@/components/SelectBox/SelectBox';
 import searchFormSchema from '@/schemas/searchForm/searchForm';
-import 'animate.css';
-import clsx from 'clsx';
-import { useRef, useActionState, startTransition } from 'react';
-import { deserializeError } from 'serialize-error';
-import { useSearchFormContext } from '../FormWrapper/FormWrapper';
 
+import { useSearchFormContext } from '../FormWrapper/FormWrapper';
 import SubmitButton from '../SubmitButton/SubmitButton';
 import * as styles from './FormContent.css';
 
-export type FormContentProps = {
-  // formState: SearchFormSubmitActionResult;
-};
+export type FormContentProps = Record<string, never>;
+// {
+// formState: SearchFormSubmitActionResult;
+// }
 
 function FormContent(): ReactElement {
   const [formState, formAction, isPending] = useActionState(handleSearchFormSubmit, null);
   const formRef = useRef<HTMLFormElement | null>(null);
   const {
+    clearErrors,
     formState: { errors, isSubmitting },
     handleSubmit,
+    setError,
   } = useSearchFormContext();
 
+  // can't use useState here to avoid useEffect as calling setError in render triggers a state update in a parent component
+  useEffect(() => {
+    if (formState?.status === 'validation-fail') {
+      const { fieldErrors } = formState.errors;
+
+      if (fieldErrors.amount) {
+        setError('amount', { message: fieldErrors.amount[0] });
+      }
+      if (fieldErrors.unit) {
+        setError('unit', { message: fieldErrors.unit[0] });
+      }
+      // there are currently no form level validation rules
+      // if (formErrors.length) {
+      //   setError('root', { message: formErrors[0] });
+      // }
+    }
+
+    if (formState?.status === 'error') {
+      setError('root', { message: deserializeError(formState.error).message });
+    }
+  }, [formState, setError]);
+
   const onSubmit = handleSubmit((data) => {
+    // RHF doesn't clear form level errors on submit
+    clearErrors('root');
+
     if (isPending) {
       return;
     }
@@ -44,36 +74,31 @@ function FormContent(): ReactElement {
 
   // isSubmitting - covers time from submit via button or enter until transition starts, which is not awaited
   // isPending - covers time from transition start until transition end
-  const shouldDisableSubmitButton = isSubmitting || isPending;
+  const isBusy = isSubmitting || isPending;
 
   return (
     <form
-      aria-label="Search form"
+      aria-busy={isBusy}
       aria-describedby="form-hint"
+      aria-label="Search form"
       className={clsx(styles.wrapper, {
-        'animate__animated animate__infinite animate__pulse': isSubmitting,
+        'animate__animated animate__infinite animate__pulse': isBusy,
       })}
       noValidate
       onSubmit={onSubmit}
       ref={formRef}
-      aria-busy={isPending}
     >
-      <p id="form-hint" className="sr-only">
+      <p className="sr-only" id="form-hint">
         Enter an amount and select a unit to get the converted value.
       </p>
       <InputField label="Amount" name="amount" />
       <SelectBox label="Unit" name="unit" options={searchFormSchema.shape.unit.options} />
-      <SubmitButton isDisabled={shouldDisableSubmitButton}>Calculate</SubmitButton>
+      <SubmitButton isDisabled={isBusy}>Calculate</SubmitButton>
 
-      <div role="alert" className={styles.output}>
-        {!isPending && formState?.status === 'error'
-          ? deserializeError(formState.error).message
-          : null}
-      </div>
-      {/* server errors currently not passed to useForm hook via errors prop */}
-      {/* <div role="alert" className={styles.output}>
+      {/* Form level errors; wrapper shouldn't be rendered conditionally, only content */}
+      <div className={styles.formErrors} role="alert">
         {errors.root?.message ?? null}
-      </div> */}
+      </div>
     </form>
   );
 }
