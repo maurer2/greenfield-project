@@ -1,34 +1,13 @@
-import type { SearchFormQueryParamsRawSchema } from '@/schemas/searchFormQueryParams/searchFormQueryParams';
-
 import ComparisonBox from '@/components/ComparisonBox/ComparisonBox';
-import searchFormQueryParamsSchema from '@/schemas/searchFormQueryParams/searchFormQueryParams';
-import Link from 'next/link';
+import { loadCalculationSearchParams } from '@/lib/calculationSearchParams/calculationSearchParams';
 
-import * as styles from './error.css';
+export default async function Results({ searchParams }: PageProps<'/calculated-results'>) {
+  // triggers closest error.tsx if invalid
+  const { amount, unit } = await loadCalculationSearchParams(searchParams, { strict: true });
 
-type PageProps = {
-  searchParams?: Promise<SearchFormQueryParamsRawSchema>;
-};
-
-export default async function Results({ searchParams }: PageProps) {
-  const searchParamsClean = searchFormQueryParamsSchema.safeParse(await searchParams);
-
-  // workaround
-  if (!searchParamsClean.success) {
-    return (
-      <div className={styles.wrapper}>
-        <h2>Missing or invalid query params.</h2>
-        <div className={styles.body}>
-          <code className={styles.code}>{JSON.stringify(searchParamsClean.error, null, 4)}</code>
-        </div>
-        <Link className={styles.backLink} href="/">
-          Back
-        </Link>
-      </div>
-    );
+  if (amount === null || unit === null) {
+    throw new Error('Missing required query param(s)');
   }
-
-  const { amount, unit } = searchParamsClean.data;
 
   return <ComparisonBox amount={amount} unit={unit} />;
 }

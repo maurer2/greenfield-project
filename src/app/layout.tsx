@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
 import type { PropsWithChildren } from 'react';
 
-import Background from '@/components/Background/Background';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import 'modern-normalize/modern-normalize.css';
+
+import Background from '@/components/Background/Background';
 
 import './globals.css';
 import * as styles from './layout.css';
@@ -16,10 +18,12 @@ export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en">
       <body>
-        <main className={styles.page}>
-          <Background />
-          <div className={styles.content}>{children}</div>
-        </main>
+        <NuqsAdapter>
+          <main className={styles.page}>
+            <Background />
+            <div className={styles.content}>{children}</div>
+          </main>
+        </NuqsAdapter>
       </body>
     </html>
   );
