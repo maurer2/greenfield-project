@@ -54,5 +54,8 @@
   "engines": {
     "npm": "Please use pnpm",
     "yarn": "Please use pnpm"
+  },
+  "devDependencies": {
+    "jiti": "^2.7.0"
   }
 }

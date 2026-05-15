@@ -34,7 +34,7 @@
         "js/ts.inlayHints.propertyDeclarationTypes.enabled": true,
         "js/ts.inlayHints.variableTypes.suppressWhenTypeMatchesName": false, // show variable type hints even for primitives (e.g. strings, numbers, booleans)
         // eslint
-        "eslint.useFlatConfig": false,
+        "eslint.useFlatConfig": true,
         // markdown
         "markdown.preview.scrollEditorWithPreview": true,
         "markdown.preview.scrollPreviewWithEditor": true,

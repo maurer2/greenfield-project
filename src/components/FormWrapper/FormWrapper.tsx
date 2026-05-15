@@ -1,13 +1,15 @@
 'use client';
 
-import type { FormContentProps } from '@/components/FormContent/FormContent';
-import type { SearchFormValues } from '@/schemas/searchForm/searchForm';
 import type { ElementType, ReactElement } from 'react';
 
-import searchFormSchema from '@/schemas/searchForm/searchForm';
 import { zodResolver } from '@hookform/resolvers/zod';
 import dynamic from 'next/dynamic';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
+
+import type { FormContentProps } from '@/components/FormContent/FormContent';
+import type { SearchFormValues } from '@/schemas/searchForm/searchForm';
+
+import searchFormSchema from '@/schemas/searchForm/searchForm';
 
 // avoid hydration errors
 // https://github.com/react-hook-form/devtools/issues/187
