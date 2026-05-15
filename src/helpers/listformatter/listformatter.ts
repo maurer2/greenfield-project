@@ -1,5 +1,7 @@
 // https://github.com/maurer2/run-types-run/blob/main/src/helpers/listformatter/listformatter.ts
 
+// needed for type generation
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const behaviourValues = ['and', 'or', 'delimiter'] as const satisfies readonly string[];
 const behaviourMap: Record<(typeof behaviourValues)[number], Intl.ListFormatType> = {
   and: 'conjunction',

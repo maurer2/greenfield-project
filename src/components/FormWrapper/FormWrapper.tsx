@@ -1,13 +1,12 @@
 'use client';
 
-import type { /* ElementType, */ ReactElement } from 'react';
+import type { /* ElementType, */ ReactNode } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 // import dynamic from 'next/dynamic';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 
-// import type { FormContentProps } from '@/components/FormContent/FormContent';
-import type { SearchFormValues } from '@/schemas/searchForm/searchForm';
+import type { SearchFormValues, Unit } from '@/schemas/searchForm/searchForm';
 
 import searchFormSchema from '@/schemas/searchForm/searchForm';
 
@@ -19,15 +18,18 @@ import searchFormSchema from '@/schemas/searchForm/searchForm';
 // );
 
 type FormWrapperProps = {
-  children: ReactElement;
+  amount: number;
+  children: ReactNode;
+  unit: Unit;
 };
 
-export default function FormWrapper({ children }: FormWrapperProps): ReactElement {
+export default function FormWrapper({ amount, children, unit }: FormWrapperProps) {
   const form = useForm({
     defaultValues: {
-      amount: 1,
-      unit: 'sqm',
+      amount,
+      unit,
     },
+    mode: 'onBlur',
     resolver: zodResolver(searchFormSchema),
   });
 

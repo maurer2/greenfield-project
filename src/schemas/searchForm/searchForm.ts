@@ -1,5 +1,6 @@
-import { formatList } from '@/helpers/listformatter/listformatter';
 import { z } from 'zod';
+
+import { formatList } from '@/helpers/listformatter/listformatter';
 
 const formatListWithOr = formatList('or');
 
@@ -33,6 +34,6 @@ const searchFormSchema = z
 
 export default searchFormSchema;
 
-export type SearchFormValues = z.input<typeof searchFormSchema>;
-export type SearchFormSchema = z.output<typeof searchFormSchema>;
 export type SearchFormErrors = z.inferFlattenedErrors<typeof searchFormSchema>;
+export type SearchFormSchema = z.output<typeof searchFormSchema>;
+export type SearchFormValues = z.input<typeof searchFormSchema>;
