@@ -1,12 +1,9 @@
 import FormContent from '@/components/FormContent/FormContent';
 import FormWrapper from '@/components/FormWrapper/FormWrapper';
-import { loadCalculationSearchParamsWithDefaults } from '@/lib/calculationSearchParams/calculationSearchParams';
 
-export default async function Home({ searchParams }: PageProps<'/'>) {
-  const { amount, unit } = await loadCalculationSearchParamsWithDefaults(searchParams);
-
+export default function Home() {
   return (
-    <FormWrapper amount={amount} unit={unit}>
+    <FormWrapper>
       <FormContent />
     </FormWrapper>
   );

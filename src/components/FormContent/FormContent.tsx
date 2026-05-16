@@ -3,7 +3,6 @@
 import type { ReactElement } from 'react';
 
 import clsx from 'clsx';
-import { useQueryStates } from 'nuqs';
 import { startTransition, useActionState, useEffect, useRef } from 'react';
 import { deserializeError } from 'serialize-error';
 
@@ -12,7 +11,6 @@ import InputField from '@/components/InputField/InputField';
 import 'animate.css';
 
 import SelectBox from '@/components/SelectBox/SelectBox';
-import { calculationSearchParamsConfigWithDefaults } from '@/lib/calculationSearchParams/calculationSearchParams';
 import searchFormSchema from '@/schemas/searchForm/searchForm';
 
 import { useSearchFormContext } from '../FormWrapper/FormWrapper';
@@ -29,9 +27,7 @@ function FormContent(): ReactElement {
     formState: { errors, isSubmitting },
     handleSubmit,
     setError,
-    subscribe,
   } = useSearchFormContext();
-  const [, setCalculationSearchParams] = useQueryStates(calculationSearchParamsConfigWithDefaults);
 
   // can't use useState here to avoid useEffect as calling setError in render triggers a state update in a parent component
   useEffect(() => {
@@ -54,29 +50,6 @@ function FormContent(): ReactElement {
       setError('root', { message: deserializeError(formState.error).message });
     }
   }, [formState, setError]);
-
-  useEffect(() => {
-    const callback = subscribe({
-      callback: ({ isValid, values }) => {
-        if (!isValid) {
-          return;
-        }
-
-        // can't access parsed values from resolver here
-        setCalculationSearchParams({
-          amount: typeof values.amount === 'string' ? parseInt(values.amount, 10) : values.amount,
-          unit: values.unit,
-        });
-      },
-      formState: {
-        isValid: true,
-        values: true,
-      },
-      name: ['amount', 'unit'],
-    });
-
-    return () => callback();
-  }, [subscribe, setCalculationSearchParams]);
 
   const onSubmit = handleSubmit((data) => {
     // RHF doesn't clear form level errors on submit
