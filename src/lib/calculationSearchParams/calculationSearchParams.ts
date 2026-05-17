@@ -1,4 +1,4 @@
-import { createLoader, parseAsInteger, parseAsStringEnum } from 'nuqs/server';
+import { createLoader, createSerializer, parseAsInteger, parseAsStringEnum } from 'nuqs/server';
 
 import { units } from '@/schemas/searchForm/searchForm';
 
@@ -18,3 +18,5 @@ export const loadCalculationSearchParams = createLoader(calculationSearchParamsC
 export const loadCalculationSearchParamsWithDefaults = createLoader(
   calculationSearchParamsConfigWithDefaults,
 );
+
+export const calculationSearchParamsGenerator = createSerializer(calculationSearchParamsConfig);

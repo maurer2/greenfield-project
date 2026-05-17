@@ -28,7 +28,7 @@ export async function handleSearchFormSubmit(
   let resultsPageUrl: null | string = null;
 
   try {
-    await setTimeoutNode(1000);
+    // await setTimeoutNode(1000);
 
     const result = searchFormSchema.safeParse({
       amount: formData.get('amount'),

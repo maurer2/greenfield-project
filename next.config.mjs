@@ -6,7 +6,9 @@ const withVanillaExtract = createVanillaExtractPlugin({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  cacheComponents: true,
   reactStrictMode: true,
+  // typedRoutes: true,
   webpack: (config) => {
     // adds support for ?react that is required in vite for vite-plugin-svgr
     config.module.rules.push({

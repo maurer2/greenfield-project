@@ -1,19 +1,24 @@
-import type { SearchFormSchema } from '@/types';
 import type { ReactElement } from 'react';
+
+import type { SearchFormSchema } from '@/types';
 
 import * as styles from './ComparisonList.css';
 
 export type ComparisonListProps = {
   amount: number;
-  amountCalculatedInDecimals: number;
+  // amountCalculatedInDecimals: number;
+  calculationPromise: Promise<number>;
   unit: SearchFormSchema['unit'];
 };
 
-function ComparisonList({
+export default async function ComparisonList({
   amount,
-  amountCalculatedInDecimals,
+  // amountCalculatedInDecimals,
+  calculationPromise,
   unit,
-}: ComparisonListProps): ReactElement {
+}: ComparisonListProps): Promise<ReactElement> {
+  const amountCalculatedInDecimals = await calculationPromise;
+
   const amountCalculatedInDecimalsFormatted = new Intl.NumberFormat('en-GB', {
     maximumFractionDigits: 5,
     minimumFractionDigits: 2,
@@ -33,5 +38,3 @@ function ComparisonList({
     </dl>
   );
 }
-
-export default ComparisonList;

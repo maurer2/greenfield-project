@@ -8,7 +8,7 @@ import { useQueryStates } from 'nuqs';
 import { useEffect } from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 
-import type { SearchFormValues } from '@/schemas/searchForm/searchForm';
+import type { SearchFormValues } from '@/types';
 
 import { calculationSearchParamsConfigWithDefaults } from '@/lib/calculationSearchParams/calculationSearchParams';
 import searchFormSchema from '@/schemas/searchForm/searchForm';
