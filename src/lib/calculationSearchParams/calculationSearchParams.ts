@@ -2,7 +2,7 @@ import { createLoader, createSerializer, parseAsInteger, parseAsStringEnum } fro
 
 import { units } from '@/schemas/searchForm/searchForm';
 
-// results page - no default
+// results page - no defaults
 export const calculationSearchParamsConfig = {
   amount: parseAsInteger, //.withDefault(1), // allows 0
   unit: parseAsStringEnum([...units]), //.withDefault('sqm'),

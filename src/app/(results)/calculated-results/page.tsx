@@ -1,13 +1,12 @@
-import ComparisonBox from '@/components/ComparisonBox/ComparisonBox';
-import { loadCalculationSearchParams } from '@/lib/calculationSearchParams/calculationSearchParams';
+import { Suspense } from 'react';
 
-export default async function Results({ searchParams }: PageProps<'/calculated-results'>) {
-  // triggers closest error.tsx if invalid
-  const { amount, unit } = await loadCalculationSearchParams(searchParams, { strict: true });
+import ComparisonBoxAdaper from './components/ComparisonBoxAdapter/ComparisonBoxAdapter';
 
-  if (amount === null || unit === null) {
-    throw new Error('Missing required query param(s)');
-  }
-
-  return <ComparisonBox amount={amount} unit={unit} />;
+export default function Results({ searchParams }: PageProps<'/calculated-results'>) {
+  return (
+    // needed as query paramers are accessed in child
+    <Suspense>
+      <ComparisonBoxAdaper searchParams={searchParams} />
+    </Suspense>
+  );
 }
