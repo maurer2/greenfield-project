@@ -1,25 +1,20 @@
 'use client';
 
-import type { ReactElement } from 'react';
-
 import clsx from 'clsx';
 import { startTransition, useActionState, useEffect, useRef } from 'react';
 import { deserializeError } from 'serialize-error';
 
 import { handleSearchFormSubmit } from '@/app/actions/handleSearchFormSubmit/handleSearchFormSubmit';
-import InputField from '@/components/InputField/InputField';
 import 'animate.css';
 
-import SelectBox from '@/components/SelectBox/SelectBox';
 import searchFormSchema from '@/schemas/searchForm/searchForm';
 
 import { useSearchFormContext } from '../FormWrapper/FormWrapper';
+import { SearchFormInputField, SearchFormSelectBox } from '../SearchFormFields/SearchFormFields';
 import SubmitButton from '../SubmitButton/SubmitButton';
 import * as styles from './FormContent.css';
 
-export type FormContentProps = Record<string, never>;
-
-function FormContent(): ReactElement {
+function FormContent() {
   const [formState, formAction, isPending] = useActionState(handleSearchFormSubmit, null);
   const formRef = useRef<HTMLFormElement | null>(null);
   const {
@@ -88,8 +83,8 @@ function FormContent(): ReactElement {
       <p className="sr-only" id="form-hint">
         Enter an amount and select a unit to get the converted value.
       </p>
-      <InputField label="Amount" name="amount" />
-      <SelectBox label="Unit" name="unit" options={searchFormSchema.shape.unit.options} />
+      <SearchFormInputField label="Amount" name="amount" />
+      <SearchFormSelectBox label="Unit" name="unit" options={searchFormSchema.shape.unit.options} />
       <SubmitButton isDisabled={isBusy}>Calculate</SubmitButton>
 
       {/* Form level errors; wrapper shouldn't be rendered conditionally, only content */}

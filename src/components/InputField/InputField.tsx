@@ -1,34 +1,29 @@
-import type { SearchFormValues } from '@/schemas/searchForm/searchForm';
 import type { ReactElement } from 'react';
 
-import { useSearchFormContext } from '../FormWrapper/FormWrapper';
+import { type FieldPath, type FieldValues, useFormContext } from 'react-hook-form';
 
 import * as styles from './inputField.css';
 
-export type InputFieldProps<T> = {
+export type InputFieldProps<TFieldValues extends FieldValues> = {
   label: string;
-  name: T;
+  name: FieldPath<TFieldValues>;
 };
 
 type InputStyleVariant = keyof typeof styles.input;
 
-function InputField<T extends keyof SearchFormValues>({
+function InputField<TFieldValues extends FieldValues>({
   label,
   name,
-}: InputFieldProps<T>): ReactElement {
-  const {
-    formState: { errors },
-    getValues,
-    register,
-  } = useSearchFormContext();
+}: InputFieldProps<TFieldValues>): ReactElement {
+  const { formState, getFieldState, getValues, register } = useFormContext<TFieldValues>();
 
-  const error = errors[name]?.message;
+  const { error: fieldError } = getFieldState(name, formState);
+  const defaultValue = getValues(name) ?? '';
 
-  const hasError = !!error;
+  const error = fieldError?.message;
+  const hasError = Boolean(error);
   const errorId = `${name}-error`;
   const currentInputState: InputStyleVariant = hasError ? 'invalid' : 'default';
-
-  const defaultValue = getValues(name) ?? '';
   const placeholder = `Enter ${label}`;
 
   return (
@@ -40,18 +35,18 @@ function InputField<T extends keyof SearchFormValues>({
         {...register(name, {
           valueAsNumber: true,
         })}
-        id={name}
-        defaultValue={defaultValue}
         aria-describedby={hasError ? errorId : undefined}
         aria-invalid={hasError ? 'true' : undefined}
         className={styles.input[currentInputState]}
+        defaultValue={defaultValue}
+        id={name}
         placeholder={placeholder}
         required
         type="number"
       />
       {hasError && (
         <div className={styles.errors} data-testid="input-error" id={errorId}>
-          <p>{error.toString()}</p>
+          <p>{error?.toString() ?? 'Error'}</p>
         </div>
       )}
     </div>

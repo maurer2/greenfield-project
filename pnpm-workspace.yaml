@@ -6,7 +6,6 @@ allowBuilds:
 minimumReleaseAge: 10080 # 7 days
 minimumReleaseAgeExclude:
   - '@babel/*'
-  - '@emotion/*'
 blockExoticSubdeps: true # no git branch as package url
 
 supportedArchitectures:
